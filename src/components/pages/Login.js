@@ -8,7 +8,7 @@ class Login extends Component {
           <h1>Login Page</h1>
         </div>
         <div>
-          <img src="./images/wm1.jpg" alt="WHITEMAGNUM" />
+          <img src="./images/MAGNUM.jpg" alt="WHITEMAGNUM" />
         </div>
       </>
     );

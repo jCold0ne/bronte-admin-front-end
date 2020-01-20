@@ -14,19 +14,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Link from "@material-ui/core/Link";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
 const useStyles = makeStyles(theme => ({
   icon: {
     marginRight: theme.spacing(2)
@@ -67,14 +54,14 @@ export default function Album() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <AppBar position="relative">
+      {/* <AppBar position="relative">
         <Toolbar>
           <CameraIcon className={classes.icon} />
           <Typography variant="h6" color="inherit" noWrap>
             Album layout
           </Typography>
         </Toolbar>
-      </AppBar>
+      </AppBar> */}
       <main>
         {/* Hero unit */}
         <div className={classes.heroContent}>
@@ -148,22 +135,6 @@ export default function Album() {
           </Grid>
         </Container>
       </main>
-      {/* Footer */}
-      <footer className={classes.footer}>
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="textSecondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
-        <Copyright />
-      </footer>
-      {/* End footer */}
     </React.Fragment>
   );
 }

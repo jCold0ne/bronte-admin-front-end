@@ -67,14 +67,7 @@ export default function Album() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <CameraIcon className={classes.icon} />
-          <Typography variant="h6" color="inherit" noWrap>
-            Album layout
-          </Typography>
-        </Toolbar>
-      </AppBar>
+
       <main>
         {/* Hero unit */}
         <div className={classes.heroContent}>
@@ -86,7 +79,7 @@ export default function Album() {
               color="textPrimary"
               gutterBottom
             >
-              Posts!!!
+              Posts
             </Typography>
             <Typography
               variant="h5"
@@ -103,11 +96,6 @@ export default function Album() {
                 <Grid item>
                   <Button variant="contained" color="primary">
                     Create New Post
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Button variant="outlined" color="primary">
-                    Secondary action
                   </Button>
                 </Grid>
               </Grid>

@@ -47,6 +47,15 @@ const styles = theme => ({
 });
 
 class SignIn extends Component {
+  handleFormSubmit = event => {
+    event.preventDefault();
+
+    // handle password verification here
+
+    console.log(this.props);
+    this.props.history.push("/dashboard");
+  };
+
   render() {
     const { classes } = this.props;
 
@@ -60,7 +69,11 @@ class SignIn extends Component {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate>
+          <form
+            className={classes.form}
+            noValidate
+            onSubmit={this.handleFormSubmit}
+          >
             <TextField
               variant="outlined"
               margin="normal"

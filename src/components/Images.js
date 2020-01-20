@@ -86,7 +86,7 @@ export default function Album() {
               color="textPrimary"
               gutterBottom
             >
-              Posts
+              Album layout
             </Typography>
             <Typography
               variant="h5"

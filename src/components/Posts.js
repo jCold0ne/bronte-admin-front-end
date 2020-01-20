@@ -86,7 +86,7 @@ export default function Album() {
               color="textPrimary"
               gutterBottom
             >
-              Posts
+              Posts!!!
             </Typography>
             <Typography
               variant="h5"
@@ -102,7 +102,7 @@ export default function Album() {
               <Grid container spacing={2} justify="center">
                 <Grid item>
                   <Button variant="contained" color="primary">
-                    Main call to action
+                    Create New Post
                   </Button>
                 </Grid>
                 <Grid item>

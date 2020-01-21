@@ -24,6 +24,7 @@ const useStyles = makeStyles(theme => ({
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
+    margin: "auto",
     backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
     boxShadow: theme.shadows[5],

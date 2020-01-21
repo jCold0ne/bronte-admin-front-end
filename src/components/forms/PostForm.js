@@ -39,11 +39,18 @@ class PostForm extends Component {
             shrink: true
           }}
         />
-        <Button variant="contained" color="secondary" type="button" mr="2rem">
-          Save Draft
-        </Button>
         <Button variant="contained" color="primary" type="button">
           Create Post
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          type="button"
+          style={{
+            marginLeft: "1rem"
+          }}
+        >
+          Save Draft
         </Button>
       </form>
     );

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import CameraIcon from "@material-ui/icons/PhotoCamera";
@@ -51,8 +52,25 @@ const classes = theme => ({
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 class Posts extends Component {
+  state = {
+    posts: []
+  };
+  // componentDidMount axios call to fetch all posts and
+  async componentDidMount() {
+    try {
+      const response = await axios.get("http://localhost:3000/posts");
+      const posts = response.data;
+      this.setState({
+        posts
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   render() {
     const { classes } = this.props;
+    const { posts } = this.state;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -93,8 +111,8 @@ class Posts extends Component {
           <Container className={classes.cardGrid} maxWidth="md">
             {/* End hero unit */}
             <Grid container spacing={4}>
-              {/* {cards.map(card => (
-                <Grid item key={card} xs={12} sm={6} md={4}>
+              {posts.reverse().map(post => (
+                <Grid item key={post._id} xs={12} sm={6} md={4}>
                   <Card className={classes.card}>
                     <CardMedia
                       className={classes.cardMedia}
@@ -103,12 +121,9 @@ class Posts extends Component {
                     />
                     <CardContent className={classes.cardContent}>
                       <Typography gutterBottom variant="h5" component="h2">
-                        Heading
+                        {post.title}
                       </Typography>
-                      <Typography>
-                        This is a media card. You can use this section to
-                        describe the content.
-                      </Typography>
+                      <Typography>{post.body}</Typography>
                     </CardContent>
                     <CardActions>
                       <Button size="small" color="primary">
@@ -120,7 +135,7 @@ class Posts extends Component {
                     </CardActions>
                   </Card>
                 </Grid>
-              ))} */}
+              ))}
             </Grid>
           </Container>
         </main>

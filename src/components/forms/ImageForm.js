@@ -6,12 +6,9 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
-// S3_ACCESS_KEY=AKIAWCYMVJKXRBVYWUFJ
-// S3_SECRET_KEY=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
-
 const s3 = new AWS.S3({
-  accessKeyId: "AKIAWCYMVJKXRBVYWUFJ",
-  secretAccessKey: "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",
+  accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY,
+  secretAccessKey: process.env.REACT_APP_AWS_SECRET_KEY,
   region: "ap-southeast-2"
 });
 

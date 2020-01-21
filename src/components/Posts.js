@@ -14,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Link from "@material-ui/core/Link";
 import ModalWrapper from "./ModalWrapper";
+import PostForm from "./forms/PostForm";
 
 function Copyright() {
   return (
@@ -96,7 +97,7 @@ export default function Album() {
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">
                 <Grid item>
-                  <ModalWrapper text="Create Post" />
+                  <ModalWrapper text="Create Post" component={PostForm} />
                 </Grid>
               </Grid>
             </div>

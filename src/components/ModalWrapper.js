@@ -74,8 +74,7 @@ export default function SimpleModal(props) {
           >
             <DeleteIcon fontSize="small" />
           </IconButton>
-
-          <Component />
+          <Component handleClose={handleClose} />
         </div>
       </Modal>
     </div>

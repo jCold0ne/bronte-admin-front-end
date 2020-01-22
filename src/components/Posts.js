@@ -1,21 +1,21 @@
 import React, { Component } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { connect } from "react-redux";
 import { fetchPosts } from "./../actions";
-import AppBar from "@material-ui/core/AppBar";
+// import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
-import CameraIcon from "@material-ui/icons/PhotoCamera";
+// import CameraIcon from "@material-ui/icons/PhotoCamera";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
-import Toolbar from "@material-ui/core/Toolbar";
+// import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Link from "@material-ui/core/Link";
+// import Link from "@material-ui/core/Link";
 import ModalWrapper from "./ModalWrapper";
 import PostForm from "./forms/PostForm";
 
@@ -64,6 +64,10 @@ class Posts extends Component {
 
   render() {
     const { classes, posts } = this.props;
+
+    function addEllipses(post) {
+      if (post.body.length > 30) return post.body.substring(0, 30) + "...";
+    }
 
     return (
       <React.Fragment>
@@ -117,14 +121,14 @@ class Posts extends Component {
                       <Typography gutterBottom variant="h5" component="h2">
                         {post.title}
                       </Typography>
-                      <Typography>{post.body}</Typography>
+                      <Typography>{addEllipses(post)}</Typography>
                     </CardContent>
                     <CardActions>
                       <Button size="small" color="primary">
-                        View
+                        Edit
                       </Button>
                       <Button size="small" color="primary">
-                        Edit
+                        Delete
                       </Button>
                     </CardActions>
                   </Card>

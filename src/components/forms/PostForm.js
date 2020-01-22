@@ -15,18 +15,17 @@ class PostForm extends Component {
     this.setState({ [name]: value });
   };
 
-  onFormSubmit = event => {
+  onFormSubmit = async event => {
     event.preventDefault();
     const { title, body } = this.state;
 
-    axios
-      .post("http://localhost:3000/posts", { title, body })
-      .then(response => {
-        console.log(response);
-      })
-      .catch(error => {
-        console.log(error);
+    try {
+      const response = await axios.post("http://localhost:3000/posts", {
+        title,
+        body
       });
+      const post = response.data;
+    } catch (error) {}
   };
 
   render() {

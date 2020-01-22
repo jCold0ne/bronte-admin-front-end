@@ -26,7 +26,8 @@ class PostForm extends Component {
         title,
         body
       });
-      this.props.fetchPosts(response.data);
+      await this.props.fetchPosts(response.data);
+      this.props.handleClose();
     } catch (error) {}
   };
 
@@ -68,6 +69,7 @@ class PostForm extends Component {
           variant="contained"
           color="secondary"
           type="button"
+          onClick="handleClose" // does not close modal - hooks?
           style={{
             marginLeft: "1rem"
           }}

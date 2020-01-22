@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { connect } from "react-redux";
+import { fetchPosts } from "./../actions";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import CameraIcon from "@material-ui/icons/PhotoCamera";
@@ -52,25 +54,17 @@ const classes = theme => ({
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 class Posts extends Component {
-  state = {
-    posts: []
-  };
-  // componentDidMount axios call to fetch all posts and
   async componentDidMount() {
     try {
-      const response = await axios.get("http://localhost:3000/posts");
-      const posts = response.data;
-      this.setState({
-        posts
-      });
+      this.props.fetchPosts();
     } catch (error) {
       console.log(error);
     }
   }
 
   render() {
-    const { classes } = this.props;
-    const { posts } = this.state;
+    const { classes, posts } = this.props;
+
     return (
       <React.Fragment>
         <CssBaseline />
@@ -144,4 +138,12 @@ class Posts extends Component {
   }
 }
 
-export default withStyles(classes)(Posts);
+const mapStateToProps = state => {
+  return {
+    posts: state.posts
+  };
+};
+
+export default connect(mapStateToProps, { fetchPosts })(
+  withStyles(classes)(Posts)
+);

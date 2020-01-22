@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import { connect } from "react-redux";
+import { fetchPosts } from "../../actions";
 import axios from "axios";
 
 class PostForm extends Component {
@@ -24,7 +26,7 @@ class PostForm extends Component {
         title,
         body
       });
-      const post = response.data;
+      this.props.fetchPosts(response.data);
     } catch (error) {}
   };
 
@@ -77,4 +79,4 @@ class PostForm extends Component {
   }
 }
 
-export default PostForm;
+export default connect(null, { fetchPosts })(PostForm);

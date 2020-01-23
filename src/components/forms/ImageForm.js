@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { uploadFile } from "react-s3";
+import axios from "axios";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -85,28 +86,22 @@ class ImageForm extends Component {
     };
   };
 
+  handleFormSubmit = async event => {
+    const { images } = this.state;
+    event.preventDefault();
+    // send photos to database
+    const data = await axios.post("http://localhost:3000/images", { images });
+    console.log(data);
+    // update redux state to show new uploads
+    // close modal
+  };
+
   render() {
     const { classes } = this.props;
     const { images } = this.state;
     return (
-      // <div className="App">
-      //   {/* Pass FilePond properties as attributes */}
-      //   <TextField id="standard-basic" label="Standard" />
-      //   <input
-      //     accept="image/*"
-      //     className={classes.input}
-      //     id="raised-button-file"
-      //     multiple
-      //     type="file"
-      //   />
-      //   <label htmlFor="raised-button-file">
-      //     <Button raised component="span" className={classes.button}>
-      //       Upload
-      //     </Button>
-      //   </label>
-      // </div>
       <div>
-        <form action="">
+        <form>
           {images.map((image, index) => (
             <div>
               <label>Upload image</label>
@@ -121,6 +116,7 @@ class ImageForm extends Component {
             </div>
           ))}
           <button onClick={this.handleButtonClick}>Add Image</button>
+          <button onClick={this.handleFormSubmit}>Save Image(s)</button>
         </form>
       </div>
     );

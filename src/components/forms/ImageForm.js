@@ -1,15 +1,8 @@
 import React, { Component } from "react";
-import AWS from "aws-sdk";
 import { uploadFile } from "react-s3";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-
-const s3 = new AWS.S3({
-  accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY,
-  secretAccessKey: process.env.REACT_APP_S3_SECRET_KEY,
-  region: "ap-southeast-2"
-});
 
 const config = {
   bucketName: process.env.REACT_APP_S3_BUCKET_NAME,
@@ -69,11 +62,27 @@ class ImageForm extends Component {
     };
   };
 
-  handleFileChange = event => {
-    const file = event.target.files[0];
-    uploadFile(file, config)
-      .then(data => console.log(data))
-      .catch(error => console.log(error));
+  handleFileChange = index => {
+    return event => {
+      const file = event.target.files[0];
+      uploadFile(file, config)
+        .then(data => {
+          // set url location to correct post in state
+          this.setState(state => ({
+            images: state.images.map((image, imageIndex) => {
+              if (imageIndex === index) {
+                return {
+                  ...image,
+                  url: data.location
+                };
+              }
+
+              return image;
+            })
+          }));
+        })
+        .catch(error => console.log(error));
+    };
   };
 
   render() {
@@ -101,7 +110,7 @@ class ImageForm extends Component {
           {images.map((image, index) => (
             <div>
               <label>Upload image</label>
-              <input type="file" onChange={this.handleFileChange} />
+              <input type="file" onChange={this.handleFileChange(index)} />
               <label>Enter caption</label>
               <input
                 type="text"

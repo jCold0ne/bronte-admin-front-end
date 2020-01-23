@@ -17,7 +17,8 @@ import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 // import Link from "@material-ui/core/Link";
 import ModalWrapper from "./ModalWrapper";
-import PostForm from "./forms/PostForm";
+import CreatePostForm from "./forms/CreatePostForm";
+import EditPostForm from "./forms/EditPostForm";
 
 const classes = theme => ({
   icon: {
@@ -100,7 +101,10 @@ class Posts extends Component {
               <div className={classes.heroButtons}>
                 <Grid container spacing={2} justify="center">
                   <Grid item>
-                    <ModalWrapper text="Create Post" component={PostForm} />
+                    <ModalWrapper
+                      text="Create Post"
+                      component={CreatePostForm}
+                    />
                   </Grid>
                 </Grid>
               </div>
@@ -126,9 +130,9 @@ class Posts extends Component {
                     <CardActions>
                       <ModalWrapper
                         text="Edit"
-                        component={() => <PostForm post={post} />}
+                        component={() => <EditPostForm post={post} />}
                       />
-                      <ModalWrapper text="Delete" component={PostForm} />
+                      <ModalWrapper text="Delete" component={CreatePostForm} />
                     </CardActions>
                   </Card>
                 </Grid>

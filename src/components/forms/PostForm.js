@@ -19,6 +19,14 @@ class PostForm extends Component {
     if (post) {
       this.setState({ title: post.title, body: post.body, type: "edit" });
     }
+
+    if (post) {
+      this.setState({
+        title: post.title,
+        body: post.body,
+        type: "delete"
+      });
+    }
   }
 
   onInputChange = event => {
@@ -100,14 +108,16 @@ class PostForm extends Component {
             </Button>
           </>
         ) : (
-          <Button
-            variant="contained"
-            color="primary"
-            type="button"
-            onClick={this.onFormSubmit}
-          >
-            Edit Post
-          </Button>
+          <>
+            <Button
+              variant="contained"
+              color="primary"
+              type="button"
+              onClick={this.onFormSubmit}
+            >
+              Edit Post
+            </Button>
+          </>
         )}
       </form>
     );

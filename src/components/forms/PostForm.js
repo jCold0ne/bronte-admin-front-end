@@ -9,8 +9,17 @@ class PostForm extends Component {
   state = {
     title: "",
     body: "",
+    type: "create",
     error: null
   };
+
+  componentDidMount() {
+    const { post } = this.props;
+
+    if (post) {
+      this.setState({ title: post.title, body: post.body, type: "edit" });
+    }
+  }
 
   onInputChange = event => {
     const { name, value } = event.target;
@@ -19,20 +28,32 @@ class PostForm extends Component {
 
   onFormSubmit = async event => {
     event.preventDefault();
-    const { title, body } = this.state;
+    const { title, body, type } = this.state;
 
-    try {
-      const response = await axios.post("http://localhost:3000/posts", {
-        title,
-        body
-      });
-      await this.props.fetchPosts(response.data);
-      this.props.handleClose();
-    } catch (error) {}
+    if (type === "create") {
+      try {
+        const response = await axios.post("http://localhost:3000/posts", {
+          title,
+          body
+        });
+        await this.props.fetchPosts(response.data);
+        this.props.handleClose();
+      } catch (error) {}
+    } else if (type === "edit") {
+      try {
+        const { _id } = this.props.post;
+        const response = await axios.put(`http://localhost:3000/posts/${_id}`, {
+          title,
+          body
+        });
+        await this.props.fetchPosts(response.data);
+        this.props.handleClose();
+      } catch (error) {}
+    }
   };
 
   render() {
-    const { title, body } = this.state;
+    const { title, body, type } = this.state;
 
     return (
       <form>
@@ -57,25 +78,37 @@ class PostForm extends Component {
             shrink: true
           }}
         />
-        <Button
-          variant="contained"
-          color="primary"
-          type="button"
-          onClick={this.onFormSubmit}
-        >
-          Create Post
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          type="button"
-          onClick="handleClose" // does not close modal - hooks?
-          style={{
-            marginLeft: "1rem"
-          }}
-        >
-          Save Draft
-        </Button>
+        {type === "create" ? (
+          <>
+            <Button
+              variant="contained"
+              color="primary"
+              type="button"
+              onClick={this.onFormSubmit}
+            >
+              Create Post
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              type="button"
+              style={{
+                marginLeft: "1rem"
+              }}
+            >
+              Save Draft
+            </Button>
+          </>
+        ) : (
+          <Button
+            variant="contained"
+            color="primary"
+            type="button"
+            onClick={this.onFormSubmit}
+          >
+            Edit Post
+          </Button>
+        )}
       </form>
     );
   }

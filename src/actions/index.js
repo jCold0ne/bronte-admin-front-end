@@ -10,3 +10,10 @@ export const fetchPosts = () => {
     });
   };
 };
+
+export const getPost = id => {
+  return {
+    type: "GET_POST",
+    payload: id
+  };
+};

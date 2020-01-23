@@ -53,6 +53,10 @@ const classes = theme => ({
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
+function addEllipses(post) {
+  if (post.body.length > 30) return post.body.substring(0, 30) + "...";
+}
+
 class Posts extends Component {
   async componentDidMount() {
     try {
@@ -64,10 +68,6 @@ class Posts extends Component {
 
   render() {
     const { classes, posts } = this.props;
-
-    function addEllipses(post) {
-      if (post.body.length > 30) return post.body.substring(0, 30) + "...";
-    }
 
     return (
       <React.Fragment>
@@ -124,12 +124,11 @@ class Posts extends Component {
                       <Typography>{addEllipses(post)}</Typography>
                     </CardContent>
                     <CardActions>
-                      <Button size="small" color="primary">
-                        Edit
-                      </Button>
-                      <Button size="small" color="primary">
-                        Delete
-                      </Button>
+                      <ModalWrapper
+                        text="Edit"
+                        component={() => <PostForm post={post} />}
+                      />
+                      <ModalWrapper text="Delete" component={PostForm} />
                     </CardActions>
                   </Card>
                 </Grid>

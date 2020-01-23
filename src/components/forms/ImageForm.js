@@ -1,19 +1,23 @@
 import React, { Component } from "react";
 import AWS from "aws-sdk";
+import { uploadFile } from "react-s3";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
-import { FilePond, registerPlugin } from "react-filepond";
-import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import TextField from "@material-ui/core/TextField";
 
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
-
 const s3 = new AWS.S3({
-  accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY,
-  secretAccessKey: process.env.REACT_APP_AWS_SECRET_KEY,
+  accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY,
+  secretAccessKey: process.env.REACT_APP_S3_SECRET_KEY,
   region: "ap-southeast-2"
 });
+
+const config = {
+  bucketName: process.env.REACT_APP_S3_BUCKET_NAME,
+  dirName: "photos",
+  region: process.env.REACT_APP_S3_BUCKET_REGION,
+  accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY,
+  secretAccessKey: process.env.REACT_APP_S3_SECRET_KEY
+};
 
 const styles = theme => ({
   button: {
@@ -26,9 +30,6 @@ const styles = theme => ({
 
 class ImageForm extends Component {
   state = {
-    // Set initial files, type 'local' means this is a file
-    // that has already been uploaded to the server (see docs)
-    files: [],
     images: [
       {
         url: "",
@@ -36,10 +37,6 @@ class ImageForm extends Component {
       }
     ]
   };
-
-  handleInit() {
-    console.log("FilePond instance has initialised", this.pond);
-  }
 
   handleButtonClick = event => {
     event.preventDefault();
@@ -72,6 +69,13 @@ class ImageForm extends Component {
     };
   };
 
+  handleFileChange = event => {
+    const file = event.target.files[0];
+    uploadFile(file, config)
+      .then(data => console.log(data))
+      .catch(error => console.log(error));
+  };
+
   render() {
     const { classes } = this.props;
     const { images } = this.state;
@@ -95,9 +99,9 @@ class ImageForm extends Component {
       <div>
         <form action="">
           {images.map((image, index) => (
-            <>
+            <div>
               <label>Upload image</label>
-              <input type="file" />
+              <input type="file" onChange={this.handleFileChange} />
               <label>Enter caption</label>
               <input
                 type="text"
@@ -105,7 +109,7 @@ class ImageForm extends Component {
                 onChange={this.handleInputChange(index)}
                 name="caption"
               />
-            </>
+            </div>
           ))}
           <button onClick={this.handleButtonClick}>Add Image</button>
         </form>

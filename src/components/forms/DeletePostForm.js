@@ -5,11 +5,11 @@ import { connect } from "react-redux";
 import { fetchPosts } from "../../actions";
 import axios from "axios";
 
-class EditForm extends Component {
+class DeleteForm extends Component {
   state = {
     title: "",
     body: "",
-    error: null
+    error: ""
   };
 
   componentDidMount() {
@@ -23,18 +23,16 @@ class EditForm extends Component {
 
     try {
       const { _id } = this.props.post;
-      const response = await axios.put(`http://localhost:3000/posts/${_id}`, {
-        title,
-        body
-      });
+      const response = await axios.delete(
+        `http://localhost:3000/posts/${_id}`,
+        {
+          title,
+          body
+        }
+      );
       await this.props.fetchPosts(response.data);
       this.props.handleClose();
     } catch (error) {}
-  };
-
-  onInputChange = event => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
   };
 
   render() {
@@ -46,14 +44,16 @@ class EditForm extends Component {
           name="title"
           value={title}
           onChange={this.onInputChange}
-          id="standard-basic"
-          label="Title"
+          disabled
+          id="standard-disabled"
+          label="Disabled"
         />
         <TextField
           name="body"
           value={body}
           onChange={this.onInputChange}
-          id="standard-multiline-full-width"
+          disabled
+          id="standard-multiline-full-width-disabled"
           label="Body"
           multiline
           rowsMax="10"
@@ -66,15 +66,15 @@ class EditForm extends Component {
 
         <Button
           variant="contained"
-          color="primary"
+          color="secondary"
           type="button"
           onClick={this.onFormSubmit}
         >
-          Edit Post
+          Delete Post
         </Button>
       </form>
     );
   }
 }
 
-export default connect(null, { fetchPosts })(EditForm);
+export default connect(null, { fetchPosts })(DeleteForm);

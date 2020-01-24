@@ -35,7 +35,7 @@ class ModalWrapper extends Component {
 
   render() {
     const { open } = this.state;
-    const { component: Component, text, classes } = this.props;
+    const { component: Component, text, classes, ...other } = this.props;
 
     return (
       <div>
@@ -67,7 +67,7 @@ class ModalWrapper extends Component {
             >
               <DeleteIcon fontSize="small" />
             </IconButton>
-            <Component handleClose={this.handleClose} />
+            <Component handleClose={this.handleClose} {...other} />
           </div>
         </Modal>
       </div>

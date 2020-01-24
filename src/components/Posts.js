@@ -19,6 +19,7 @@ import Container from "@material-ui/core/Container";
 import ModalWrapper from "./ModalWrapper";
 import CreatePostForm from "./forms/CreatePostForm";
 import EditPostForm from "./forms/EditPostForm";
+import DeletePostForm from "./forms/DeletePostForm";
 
 const classes = theme => ({
   icon: {
@@ -130,9 +131,14 @@ class Posts extends Component {
                     <CardActions>
                       <ModalWrapper
                         text="Edit"
-                        component={() => <EditPostForm post={post} />}
+                        component={EditPostForm}
+                        post={post}
                       />
-                      <ModalWrapper text="Delete" component={CreatePostForm} />
+                      <ModalWrapper
+                        text="Delete"
+                        component={DeletePostForm}
+                        post={post}
+                      />
                     </CardActions>
                   </Card>
                 </Grid>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { uploadFile } from "react-s3";
+import { uploadFile, deleteFile } from "react-s3";
 import axios from "axios";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
@@ -26,7 +26,7 @@ class ImageForm extends Component {
   state = {
     images: [
       {
-        url: "",
+        file: null,
         caption: ""
       }
     ]
@@ -63,26 +63,45 @@ class ImageForm extends Component {
     };
   };
 
+  // handleFileChange = index => {
+  //   return event => {
+  //     const file = event.target.files[0];
+  //     uploadFile(file, config)
+  //       .then(data => {
+  //         // set url location to correct post in state
+  //         this.setState(state => ({
+  //           images: state.images.map((image, imageIndex) => {
+  //             if (imageIndex === index) {
+  //               return {
+  //                 ...image,
+  //                 url: data.location,
+  //                 name: file.name
+  //               };
+  //             }
+
+  //             return image;
+  //           })
+  //         }));
+  //       })
+  //       .catch(error => console.log(error));
+  //   };
+  // };
+
   handleFileChange = index => {
     return event => {
       const file = event.target.files[0];
-      uploadFile(file, config)
-        .then(data => {
-          // set url location to correct post in state
-          this.setState(state => ({
-            images: state.images.map((image, imageIndex) => {
-              if (imageIndex === index) {
-                return {
-                  ...image,
-                  url: data.location
-                };
-              }
+      this.setState(state => ({
+        images: state.images.map((image, imageIndex) => {
+          if (imageIndex === index) {
+            return {
+              ...image,
+              file
+            };
+          }
 
-              return image;
-            })
-          }));
+          return image;
         })
-        .catch(error => console.log(error));
+      }));
     };
   };
 
@@ -96,14 +115,24 @@ class ImageForm extends Component {
     // close modal
   };
 
+  removeImage = index => {
+    return event => {
+      event.preventDefault();
+
+      // remove image object from state
+      this.setState(state => ({
+        images: state.images.filter((image, imageIndex) => index !== imageIndex)
+      }));
+    };
+  };
+
   render() {
-    const { classes } = this.props;
     const { images } = this.state;
     return (
       <div>
         <form>
           {images.map((image, index) => (
-            <div>
+            <div key={index}>
               <label>Upload image</label>
               <input type="file" onChange={this.handleFileChange(index)} />
               <label>Enter caption</label>
@@ -113,6 +142,7 @@ class ImageForm extends Component {
                 onChange={this.handleInputChange(index)}
                 name="caption"
               />
+              <button onClick={this.removeImage(index)}>Remove Image</button>
             </div>
           ))}
           <button onClick={this.handleButtonClick}>Add Image</button>

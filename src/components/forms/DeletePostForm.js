@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import { fetchPosts } from "../../actions";
@@ -40,30 +39,11 @@ class DeleteForm extends Component {
 
     return (
       <form>
-        <TextField
-          name="title"
-          value={title}
-          onChange={this.onInputChange}
-          disabled
-          id="standard-disabled"
-          label="Disabled"
-        />
-        <TextField
-          name="body"
-          value={body}
-          onChange={this.onInputChange}
-          disabled
-          id="standard-multiline-full-width-disabled"
-          label="Body"
-          multiline
-          rowsMax="10"
-          margin="normal"
-          fullWidth
-          InputLabelProps={{
-            shrink: true
-          }}
-        />
-
+        <h1 style={{ color: "#F50057" }}>
+          Are you sure you want to delete this post?
+        </h1>
+        <h3>{title}</h3>
+        <p>{body}</p>
         <Button
           variant="contained"
           color="secondary"

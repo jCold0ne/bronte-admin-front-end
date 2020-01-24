@@ -40,8 +40,8 @@ class ModalWrapper extends Component {
     return (
       <div>
         <Button
-          variant="contained"
-          color="primary"
+          variant={text === "Delete" ? "outlined" : "contained"}
+          color={text === "Delete" ? "secondary" : "primary"}
           onClick={this.handleOpen}
           type="button"
         >

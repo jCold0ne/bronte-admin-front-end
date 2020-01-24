@@ -1,69 +1,78 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { Component } from "react";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
 
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
-
-function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`
-  };
-}
-
-const useStyles = makeStyles(theme => ({
+const classes = theme => ({
   paper: {
     position: "absolute",
-    width: 400,
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    margin: "auto",
     backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3)
   }
-}));
+});
 
-export default function SimpleModal(props) {
-  const { component: Component } = props;
-  const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
-  const [modalStyle] = React.useState(getModalStyle);
-  const [open, setOpen] = React.useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
+class ModalWrapper extends Component {
+  state = {
+    open: false
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  handleOpen = () => {
+    this.setState({ open: true });
   };
 
-  return (
-    <div>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleOpen}
-        type="button"
-      >
-        {props.text}
-      </Button>
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={open}
-        onClose={handleClose}
-      >
-        <div style={modalStyle} className={classes.paper}>
-          <Component />
-        </div>
-      </Modal>
-    </div>
-  );
+  handleClose = () => {
+    //on close save post to draft
+    this.setState({ open: false });
+  };
+
+  render() {
+    const { open } = this.state;
+    const { component: Component, text, classes } = this.props;
+
+    return (
+      <div>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={this.handleOpen}
+          type="button"
+        >
+          {text}
+        </Button>
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={open}
+          onClose={this.handleClose}
+          disableBackdropClick
+        >
+          <div className={classes.paper}>
+            <IconButton
+              aria-label="delete"
+              className={classes.margin}
+              onClick={this.handleClose}
+              style={{
+                position: "absolute",
+                top: "0px",
+                right: "0px"
+              }}
+            >
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+            <Component handleClose={this.handleClose} />
+          </div>
+        </Modal>
+      </div>
+    );
+  }
 }
+
+export default withStyles(classes)(ModalWrapper);

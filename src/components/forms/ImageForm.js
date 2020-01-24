@@ -63,30 +63,6 @@ class ImageForm extends Component {
     };
   };
 
-  // handleFileChange = index => {
-  //   return event => {
-  //     const file = event.target.files[0];
-  //     uploadFile(file, config)
-  //       .then(data => {
-  //         // set url location to correct post in state
-  //         this.setState(state => ({
-  //           images: state.images.map((image, imageIndex) => {
-  //             if (imageIndex === index) {
-  //               return {
-  //                 ...image,
-  //                 url: data.location,
-  //                 name: file.name
-  //               };
-  //             }
-
-  //             return image;
-  //           })
-  //         }));
-  //       })
-  //       .catch(error => console.log(error));
-  //   };
-  // };
-
   handleFileChange = index => {
     return event => {
       const file = event.target.files[0];
@@ -108,10 +84,26 @@ class ImageForm extends Component {
   handleFormSubmit = async event => {
     const { images } = this.state;
     event.preventDefault();
+    // upload photos to s3
+    const promises = images.map(image => uploadFile(image.file, config));
+
+    const data = await Promise.all(promises);
+
     // send photos to database
-    const data = await axios.post("http://localhost:3000/images", { images });
-    console.log(data);
+    // const data = await axios.post(`${process.env.REACT_APP_SERVER_URL}/images`, { images });
+    // console.log(data);
+    const morePromises = data.map((image, index) => {
+      return axios.post(`${process.env.REACT_APP_SERVER_URL}/images`, {
+        url: image.location,
+        caption: images[index].caption
+      });
+    });
+
+    const moreData = await Promise.all(morePromises);
+
+    console.log(moreData);
     // update redux state to show new uploads
+
     // close modal
   };
 

@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { uploadFile, deleteFile } from "react-s3";
+import { connect } from "react-redux";
+import { uploadFile } from "react-s3";
 import axios from "axios";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import { fetchImages } from "../../actions";
 
 const config = {
   bucketName: process.env.REACT_APP_S3_BUCKET_NAME,
@@ -103,8 +105,10 @@ class ImageForm extends Component {
 
     console.log(moreData);
     // update redux state to show new uploads
+    this.props.fetchImages();
 
     // close modal
+    this.props.handleClose();
   };
 
   removeImage = index => {
@@ -145,4 +149,4 @@ class ImageForm extends Component {
   }
 }
 
-export default withStyles(styles)(ImageForm);
+export default connect(null, { fetchImages })(withStyles(styles)(ImageForm));

@@ -4,14 +4,7 @@ import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import { fetchImages } from "../../actions";
 import axios from "axios";
-
-const config = {
-  bucketName: process.env.REACT_APP_S3_BUCKET_NAME,
-  dirName: "photos",
-  region: process.env.REACT_APP_S3_BUCKET_REGION,
-  accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY,
-  secretAccessKey: process.env.REACT_APP_S3_SECRET_KEY
-};
+import config from "../../config/react-s3";
 
 class DeleteImageForm extends Component {
   onFormSubmit = async event => {

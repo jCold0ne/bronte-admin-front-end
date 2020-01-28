@@ -5,9 +5,9 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import DashboardIcon from "@material-ui/icons/Dashboard";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import PeopleIcon from "@material-ui/icons/People";
-import AssignmentIcon from "@material-ui/icons/Assignment";
+import PostAddIcon from "@material-ui/icons/PostAdd";
+import ImageIcon from "@material-ui/icons/Image";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 export const mainListItems = (
   <div>
@@ -22,7 +22,7 @@ export const mainListItems = (
     <Link to="/dashboard/posts">
       <ListItem button>
         <ListItemIcon>
-          <ShoppingCartIcon />
+          <PostAddIcon />
         </ListItemIcon>
         <ListItemText primary="Posts" />
       </ListItem>
@@ -30,7 +30,7 @@ export const mainListItems = (
     <Link to="/dashboard/images">
       <ListItem button>
         <ListItemIcon>
-          <PeopleIcon />
+          <ImageIcon />
         </ListItemIcon>
         <ListItemText primary="Images" />
       </ListItem>
@@ -42,7 +42,7 @@ export const secondaryListItems = (
   <div>
     <ListItem button>
       <ListItemIcon>
-        <AssignmentIcon />
+        <SettingsIcon />
       </ListItemIcon>
       <ListItemText primary="Settings" />
     </ListItem>

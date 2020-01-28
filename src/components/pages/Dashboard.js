@@ -145,7 +145,7 @@ class Dashboard extends Component {
               noWrap
               className={classes.title}
             >
-              Dashboard
+              Bronte Admin
             </Typography>
           </Toolbar>
         </AppBar>

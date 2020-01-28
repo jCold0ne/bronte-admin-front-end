@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import axios from "axios";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -14,6 +15,7 @@ import Alert from "@material-ui/lab/Alert";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import { setAuthToken } from "./../../actions";
 
 function Copyright() {
   return (
@@ -62,6 +64,7 @@ class SignIn extends Component {
 
   handleFormSubmit = async event => {
     const { email, password } = this.state;
+    const { history, setAuthToken } = this.props;
     event.preventDefault();
 
     try {
@@ -71,7 +74,9 @@ class SignIn extends Component {
         { email, password }
       );
       // set token in redux store here
-      this.props.history.push("/dashboard");
+      console.log(response);
+      setAuthToken(response.data);
+      history.push("/dashboard");
     } catch (error) {
       console.log(error);
       this.setState({ error: "Incorrect credentials" });
@@ -157,4 +162,4 @@ class SignIn extends Component {
   }
 }
 
-export default withStyles(styles)(SignIn);
+export default connect(null, { setAuthToken })(withStyles(styles)(SignIn));

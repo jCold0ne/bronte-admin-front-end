@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Switch, Route } from "react-router-dom";
 import clsx from "clsx";
 import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -16,6 +17,7 @@ import Link from "@material-ui/core/Link";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "./../ListItems";
+import Posts from "./../Posts.js";
 import Images from "./../Images.js";
 
 const drawerWidth = 240;
@@ -168,7 +170,10 @@ class Dashboard extends Component {
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
-              <Images />
+              <Switch>
+                <Route path="/dashboard/posts" component={Posts} />
+                <Route path="/dashboard/images" component={Images} />
+              </Switch>
             </Grid>
           </Container>
         </main>

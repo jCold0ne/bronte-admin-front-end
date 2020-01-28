@@ -17,6 +17,7 @@ import Link from "@material-ui/core/Link";
 import ModalWrapper from "./ModalWrapper";
 import CreateImageForm from "./forms/CreateImageForm";
 import EditImageForm from "./forms/EditImageForm";
+import DeleteImageForm from "./forms/DeleteImageForm";
 import { fetchImages } from "./../actions";
 
 const classes = theme => ({
@@ -113,6 +114,11 @@ class Images extends Component {
                       <ModalWrapper
                         text="Edit"
                         component={EditImageForm}
+                        image={image}
+                      />
+                      <ModalWrapper
+                        text="Delete"
+                        component={DeleteImageForm}
                         image={image}
                       />
                     </CardActions>

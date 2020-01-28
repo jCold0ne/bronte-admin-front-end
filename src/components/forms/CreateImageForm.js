@@ -29,6 +29,7 @@ class ImageForm extends Component {
     images: [
       {
         file: null,
+        name: "",
         caption: ""
       }
     ]
@@ -68,11 +69,14 @@ class ImageForm extends Component {
   handleFileChange = index => {
     return event => {
       const file = event.target.files[0];
+      const name = file.name;
+      console.log(event.target.files);
       this.setState(state => ({
         images: state.images.map((image, imageIndex) => {
           if (imageIndex === index) {
             return {
               ...image,
+              name,
               file
             };
           }
@@ -91,19 +95,16 @@ class ImageForm extends Component {
 
     const data = await Promise.all(promises);
 
-    // send photos to database
-    // const data = await axios.post(`${process.env.REACT_APP_SERVER_URL}/images`, { images });
-    // console.log(data);
     const morePromises = data.map((image, index) => {
       return axios.post(`${process.env.REACT_APP_SERVER_URL}/images`, {
         url: image.location,
-        caption: images[index].caption
+        caption: images[index].caption,
+        name: images[index].name
       });
     });
 
-    const moreData = await Promise.all(morePromises);
+    await Promise.all(morePromises);
 
-    console.log(moreData);
     // update redux state to show new uploads
     this.props.fetchImages();
 

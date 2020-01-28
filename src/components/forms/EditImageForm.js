@@ -8,7 +8,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import TextField from "@material-ui/core/TextField";
 import { fetchImages } from "../../actions";
 
-const styles = theme => ({
+const classes = theme => ({
   button: {
     margin: theme.spacing.unit
   },
@@ -54,7 +54,7 @@ class EditImageForm extends Component {
         <form onSubmit={this.handleFormSubmit}>
           <div key={url}>
             <CardMedia
-              // className={styles.cardMedia}
+              className={classes.cardMedia}
               src={url}
               component="img"
               title="Image title"
@@ -75,5 +75,5 @@ class EditImageForm extends Component {
 }
 
 export default connect(null, { fetchImages })(
-  withStyles(styles)(EditImageForm)
+  withStyles(classes)(EditImageForm)
 );

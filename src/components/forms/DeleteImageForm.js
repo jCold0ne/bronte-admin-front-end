@@ -18,28 +18,36 @@ class DeleteImageForm extends Component {
     event.preventDefault();
 
     try {
-      const { _id } = this.props.image;
-      await deleteFile();
+      const { _id, name } = this.props.image;
+      console.log(name);
+      await deleteFile(name, config);
       const response = await axios.delete(
-        `${process.env.REACT_APP_SERVER_URL}/posts/${_id}`
+        `${process.env.REACT_APP_SERVER_URL}/images/${_id}`
       );
       await this.props.fetchImages(response.data);
       this.props.handleClose();
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   render() {
     const { url, caption } = this.props;
 
     return (
-      <form onSubmit={this.onFormSubmit}>
+      <form>
         <h1 style={{ color: "#F50057" }}>
           Are you sure you want to delete this image?
         </h1>
         <img src={url} alt={caption} />
         <p>{caption}</p>
-        <Button variant="contained" color="secondary" type="button">
-          Delete Post
+        <Button
+          variant="contained"
+          color="secondary"
+          type="button"
+          onClick={this.onFormSubmit}
+        >
+          Delete Image
         </Button>
       </form>
     );

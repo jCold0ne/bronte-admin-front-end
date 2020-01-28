@@ -15,7 +15,8 @@ import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Link from "@material-ui/core/Link";
 import ModalWrapper from "./ModalWrapper";
-import ImageForm from "./forms/ImageForm";
+import CreateImageForm from "./forms/CreateImageForm";
+import EditImageForm from "./forms/EditImageForm";
 import { fetchImages } from "./../actions";
 
 const classes = theme => ({
@@ -84,7 +85,10 @@ class Images extends Component {
               <div className={classes.heroButtons}>
                 <Grid container spacing={2} justify="center">
                   <Grid item>
-                    <ModalWrapper text="Create Image" component={ImageForm} />
+                    <ModalWrapper
+                      text="Create Image"
+                      component={CreateImageForm}
+                    />
                   </Grid>
                 </Grid>
               </div>
@@ -106,12 +110,11 @@ class Images extends Component {
                       <Typography>{image.caption}</Typography>
                     </CardContent>
                     <CardActions>
-                      <Button size="small" color="primary">
-                        View
-                      </Button>
-                      <Button size="small" color="primary">
-                        Edit
-                      </Button>
+                      <ModalWrapper
+                        text="Edit"
+                        component={EditImageForm}
+                        image={image}
+                      />
                     </CardActions>
                   </Card>
                 </Grid>

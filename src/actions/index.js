@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export const setAuthToken = token => {
+export const setAuthToken = (token = null) => {
+  sessionStorage.setItem("token", token);
   return {
     type: "SET_AUTH_TOKEN",
     payload: token

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
@@ -35,7 +35,7 @@ class ModalWrapper extends Component {
 
   render() {
     const { open } = this.state;
-    const { component: Component, text, classes } = this.props;
+    const { component: Component, text, classes, ...other } = this.props;
 
     return (
       <div>
@@ -67,7 +67,7 @@ class ModalWrapper extends Component {
             >
               <DeleteIcon fontSize="small" />
             </IconButton>
-            <Component handleClose={this.handleClose} />
+            <Component handleClose={this.handleClose} {...other} />
           </div>
         </Modal>
       </div>

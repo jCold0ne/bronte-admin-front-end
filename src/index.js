@@ -4,6 +4,8 @@ import App from "./components/App";
 import { Provider } from "react-redux";
 import store from "./store";
 import "typeface-roboto";
+import "filepond/dist/filepond.min.css";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 
 ReactDOM.render(
   <Provider store={store}>

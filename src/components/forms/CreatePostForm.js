@@ -31,10 +31,13 @@ class PostForm extends Component {
     const { title, body } = this.state;
 
     try {
-      const response = await axios.post("http://localhost:3000/posts", {
-        title,
-        body
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/posts`,
+        {
+          title,
+          body
+        }
+      );
       await this.props.fetchPosts(response.data);
       this.props.handleClose();
     } catch (error) {}

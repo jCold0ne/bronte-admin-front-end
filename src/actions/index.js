@@ -11,12 +11,6 @@ export const fetchPosts = () => {
   };
 };
 
-<<<<<<< HEAD
-export const getPost = id => {
-  return {
-    type: "GET_POST",
-    payload: id
-=======
 export const fetchImages = () => {
   return async (dispatch, getState) => {
     let response = await axios.get(
@@ -27,6 +21,5 @@ export const fetchImages = () => {
       type: "SET_IMAGES",
       payload: response.data
     });
->>>>>>> origin/master
   };
 };

@@ -9,8 +9,17 @@ class PostForm extends Component {
   state = {
     title: "",
     body: "",
+    type: "create",
     error: null
   };
+
+  componentDidMount() {
+    const { post } = this.props;
+
+    if (post) {
+      this.setState({ title: post.title, body: post.body, type: "edit" });
+    }
+  }
 
   onInputChange = event => {
     const { name, value } = event.target;
@@ -22,10 +31,13 @@ class PostForm extends Component {
     const { title, body } = this.state;
 
     try {
-      const response = await axios.post("http://localhost:3000/posts", {
-        title,
-        body
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/posts`,
+        {
+          title,
+          body
+        }
+      );
       await this.props.fetchPosts(response.data);
       this.props.handleClose();
     } catch (error) {}
@@ -57,6 +69,7 @@ class PostForm extends Component {
             shrink: true
           }}
         />
+
         <Button
           variant="contained"
           color="primary"

@@ -9,8 +9,17 @@ class PostForm extends Component {
   state = {
     title: "",
     body: "",
+    type: "create",
     error: null
   };
+
+  componentDidMount() {
+    const { post } = this.props;
+
+    if (post) {
+      this.setState({ title: post.title, body: post.body, type: "edit" });
+    }
+  }
 
   onInputChange = event => {
     const { name, value } = event.target;
@@ -57,6 +66,7 @@ class PostForm extends Component {
             shrink: true
           }}
         />
+
         <Button
           variant="contained"
           color="primary"

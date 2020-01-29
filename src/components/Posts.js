@@ -17,7 +17,9 @@ import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 // import Link from "@material-ui/core/Link";
 import ModalWrapper from "./ModalWrapper";
-import PostForm from "./forms/PostForm";
+import CreatePostForm from "./forms/CreatePostForm";
+import EditPostForm from "./forms/EditPostForm";
+import DeletePostForm from "./forms/DeletePostForm";
 
 const classes = theme => ({
   icon: {
@@ -53,6 +55,10 @@ const classes = theme => ({
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
+function addEllipses(post) {
+  if (post.body.length > 30) return post.body.substring(0, 30) + "...";
+}
+
 class Posts extends Component {
   async componentDidMount() {
     try {
@@ -64,10 +70,6 @@ class Posts extends Component {
 
   render() {
     const { classes, posts } = this.props;
-
-    function addEllipses(post) {
-      if (post.body.length > 30) return post.body.substring(0, 30) + "...";
-    }
 
     return (
       <React.Fragment>
@@ -100,7 +102,10 @@ class Posts extends Component {
               <div className={classes.heroButtons}>
                 <Grid container spacing={2} justify="center">
                   <Grid item>
-                    <ModalWrapper text="Create Post" component={PostForm} />
+                    <ModalWrapper
+                      text="Create Post"
+                      component={CreatePostForm}
+                    />
                   </Grid>
                 </Grid>
               </div>
@@ -124,12 +129,16 @@ class Posts extends Component {
                       <Typography>{addEllipses(post)}</Typography>
                     </CardContent>
                     <CardActions>
-                      <Button size="small" color="primary">
-                        Edit
-                      </Button>
-                      <Button size="small" color="primary">
-                        Delete
-                      </Button>
+                      <ModalWrapper
+                        text="Edit"
+                        component={EditPostForm}
+                        post={post}
+                      />
+                      <ModalWrapper
+                        text="Delete"
+                        component={DeletePostForm}
+                        post={post}
+                      />
                     </CardActions>
                   </Card>
                 </Grid>

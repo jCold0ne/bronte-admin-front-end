@@ -1,5 +1,13 @@
 import axios from "axios";
 
+export const setAuthToken = (token = null) => {
+  sessionStorage.setItem("token", token);
+  return {
+    type: "SET_AUTH_TOKEN",
+    payload: token
+  };
+};
+
 export const fetchPosts = () => {
   return async (dispatch, getState) => {
     let response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/posts`);

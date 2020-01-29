@@ -23,10 +23,13 @@ class EditForm extends Component {
 
     try {
       const { _id } = this.props.post;
-      const response = await axios.put(`http://localhost:3000/posts/${_id}`, {
-        title,
-        body
-      });
+      const response = await axios.put(
+        `${process.env.REACT_APP_SERVER_URL}/posts/${_id}`,
+        {
+          title,
+          body
+        }
+      );
       await this.props.fetchPosts(response.data);
       this.props.handleClose();
     } catch (error) {}

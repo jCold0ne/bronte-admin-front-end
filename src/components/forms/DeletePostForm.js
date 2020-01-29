@@ -23,7 +23,7 @@ class DeleteForm extends Component {
     try {
       const { _id } = this.props.post;
       const response = await axios.delete(
-        `http://localhost:3000/posts/${_id}`,
+        `${process.env.REACT_APP_SERVER_URL}/posts/${_id}`,
         {
           title,
           body

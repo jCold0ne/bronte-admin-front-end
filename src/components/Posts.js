@@ -119,7 +119,7 @@ class Posts extends Component {
                   <Card className={classes.card}>
                     <CardMedia
                       className={classes.cardMedia}
-                      image="https://source.unsplash.com/random"
+                      image={post.imageUrl}
                       title="Image title"
                     />
                     <CardContent className={classes.cardContent}>

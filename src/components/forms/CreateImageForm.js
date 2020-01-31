@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { uploadFile } from "react-s3";
 import axios from "axios";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -19,6 +21,10 @@ const styles = theme => ({
 
 class ImageForm extends Component {
   state = {
+    bnw: false,
+    portrait: false,
+    landscape: false,
+    editorial: false,
     images: [
       {
         file: null,
@@ -26,6 +32,15 @@ class ImageForm extends Component {
         caption: ""
       }
     ]
+  };
+
+  handleChange = event => {
+    event.preventDefault();
+    const { value } = event.target;
+    console.log(value);
+    this.setState(state => ({
+      [value]: !state[value]
+    }));
   };
 
   handleButtonClick = event => {
@@ -137,6 +152,50 @@ class ImageForm extends Component {
           ))}
           <button onClick={this.handleButtonClick}>Add Image</button>
           <button onClick={this.handleFormSubmit}>Save Image(s)</button>
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={this.bnw}
+                onChange={this.handleChange}
+                value="bnw"
+              />
+            }
+            label={"B&W"}
+          />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={this.portrait}
+                onChange={this.handleChange}
+                value="portrait"
+              />
+            }
+            label={"Portrait"}
+          />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={this.landscape}
+                onChange={this.handleChange}
+                value="landscape"
+              />
+            }
+            label={"Landscape"}
+          />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={this.editorial}
+                onChange={this.handleChange}
+                value="editorial"
+              />
+            }
+            label={"Editorial"}
+          />
         </form>
       </div>
     );

@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { uploadFile } from "react-s3";
 import axios from "axios";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { fetchImages } from "../../actions";
-import config from "../../config/react-s3";
 
 const styles = theme => ({
   button: {
@@ -83,20 +81,18 @@ class ImageForm extends Component {
   handleFormSubmit = async event => {
     const { images } = this.state;
     event.preventDefault();
-    // upload photos to s3
-    const promises = images.map(image => uploadFile(image.file, config));
 
-    const data = await Promise.all(promises);
+    // build up form data
+    const formData = new FormData();
 
-    const morePromises = data.map((image, index) => {
-      return axios.post(`${process.env.REACT_APP_SERVER_URL}/images`, {
-        url: image.location,
-        caption: images[index].caption,
-        name: images[index].name
-      });
+    images.forEach((image, index) => {
+      formData.append(`images`, image.file);
+      formData.append(image.name, image.caption);
     });
 
-    await Promise.all(morePromises);
+    // make axios request
+
+    await axios.post(`${process.env.REACT_APP_SERVER_URL}/images`, formData);
 
     // update redux state to show new uploads
     this.props.fetchImages();
@@ -120,7 +116,7 @@ class ImageForm extends Component {
     const { images } = this.state;
     return (
       <div>
-        <form>
+        <form encType="multipart/form-data">
           {images.map((image, index) => (
             <div key={index}>
               <label>Upload image</label>

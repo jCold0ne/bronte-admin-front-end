@@ -1,27 +1,25 @@
 import React, { Component } from "react";
-import { deleteFile } from "react-s3";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import { fetchImages } from "../../actions";
 import axios from "axios";
-import config from "../../config/react-s3";
 
 class DeleteImageForm extends Component {
   onFormSubmit = async event => {
     event.preventDefault();
 
-    try {
-      const { _id, name } = this.props.image;
-      console.log(name);
-      await deleteFile(name, config);
-      const response = await axios.delete(
-        `${process.env.REACT_APP_SERVER_URL}/images/${_id}`
-      );
-      await this.props.fetchImages(response.data);
-      this.props.handleClose();
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const { _id, name } = this.props.image;
+    //   console.log(name);
+    //   await deleteFile(name, config);
+    //   const response = await axios.delete(
+    //     `${process.env.REACT_APP_SERVER_URL}/images/${_id}`
+    //   );
+    //   await this.props.fetchImages(response.data);
+    //   this.props.handleClose();
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   render() {

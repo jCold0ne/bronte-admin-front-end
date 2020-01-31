@@ -86,12 +86,9 @@ class ImageForm extends Component {
     const formData = new FormData();
 
     images.forEach((image, index) => {
-      console.log(image);
       formData.append(`images`, image.file);
       formData.append(image.name, image.caption);
     });
-
-    console.log(formData);
 
     // make axios request
 

@@ -6,20 +6,16 @@ import axios from "axios";
 
 class DeleteImageForm extends Component {
   onFormSubmit = async event => {
+    const { _id } = this.props.image;
     event.preventDefault();
 
-    // try {
-    //   const { _id, name } = this.props.image;
-    //   console.log(name);
-    //   await deleteFile(name, config);
-    //   const response = await axios.delete(
-    //     `${process.env.REACT_APP_SERVER_URL}/images/${_id}`
-    //   );
-    //   await this.props.fetchImages(response.data);
-    //   this.props.handleClose();
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      await axios.delete(`${process.env.REACT_APP_SERVER_URL}/images/${_id}`);
+      await this.props.fetchImages();
+      this.props.handleClose();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   render() {

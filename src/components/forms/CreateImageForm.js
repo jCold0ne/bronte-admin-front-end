@@ -4,15 +4,13 @@ import { uploadFile } from "react-s3";
 import axios from "axios";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
 import { fetchImages } from "../../actions";
 import config from "../../config/react-s3";
 
 const styles = theme => ({
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing
   },
   input: {
     display: "none"
@@ -21,7 +19,7 @@ const styles = theme => ({
 
 class ImageForm extends Component {
   state = {
-    bnw: false,
+    blackandwhite: false,
     portrait: false,
     landscape: false,
     editorial: false,
@@ -34,6 +32,7 @@ class ImageForm extends Component {
     ]
   };
 
+  //Checkbox onclick
   handleChange = event => {
     event.preventDefault();
     const { value } = event.target;
@@ -97,6 +96,7 @@ class ImageForm extends Component {
 
   handleFormSubmit = async event => {
     const { images } = this.state;
+    const { value } = event.target;
     event.preventDefault();
     // upload photos to s3
     const promises = images.map(image => uploadFile(image.file, config));
@@ -107,7 +107,8 @@ class ImageForm extends Component {
       return axios.post(`${process.env.REACT_APP_SERVER_URL}/images`, {
         url: image.location,
         caption: images[index].caption,
-        name: images[index].name
+        name: images[index].name,
+        category: [value]
       });
     });
 
@@ -150,15 +151,13 @@ class ImageForm extends Component {
               <button onClick={this.removeImage(index)}>Remove Image</button>
             </div>
           ))}
-          <button onClick={this.handleButtonClick}>Add Image</button>
-          <button onClick={this.handleFormSubmit}>Save Image(s)</button>
 
           <FormControlLabel
             control={
               <Checkbox
-                checked={this.bnw}
+                checked={this.blackandwhite}
                 onChange={this.handleChange}
-                value="bnw"
+                value="blackandwhite"
               />
             }
             label={"B&W"}
@@ -196,6 +195,8 @@ class ImageForm extends Component {
             }
             label={"Editorial"}
           />
+          <button onClick={this.handleButtonClick}>Add Image</button>
+          <button onClick={this.handleFormSubmit}>Save Image(s)</button>
         </form>
       </div>
     );

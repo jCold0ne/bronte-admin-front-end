@@ -1,10 +1,58 @@
-import React, { Component } from "react";
+import React, { Component, useMemo } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { fetchImages } from "../../actions";
+import Dropzone, { useDropzone } from "react-dropzone";
+
+// const baseStyle = {
+//   flex: 1,
+//   display: "flex",
+//   flexDirection: "column",
+//   alignItems: "center",
+//   padding: "20px",
+//   borderWidth: 2,
+//   borderRadius: 2,
+//   borderColor: "#eeeeee",
+//   borderStyle: "dashed",
+//   backgroundColor: "#fafafa",
+//   color: "#bdbdbd",
+//   outline: "none",
+//   transition: "border .24s ease-in-out"
+// };
+
+// const activeStyle = {
+//   borderColor: "#2196f3"
+// };
+
+// const acceptStyle = {
+//   borderColor: "#00e676"
+// };
+
+// const rejectStyle = {
+//   borderColor: "#ff1744"
+// };
+
+// const {
+//   // acceptedFiles,
+//   // getRootProps,
+//   // getInputProps,
+//   isDragActive,
+//   isDragAccept,
+//   isDragReject
+// } = useDropzone({ accept: "image/*" });
+
+// const style = useMemo(
+//   () => ({
+//     ...baseStyle,
+//     ...(isDragActive ? activeStyle : {}),
+//     ...(isDragAccept ? acceptStyle : {}),
+//     ...(isDragReject ? rejectStyle : {})
+//   }),
+//   [isDragAccept, isDragActive, isDragReject]
+// );
 
 const styles = theme => ({
   button: {
@@ -17,13 +65,20 @@ const styles = theme => ({
 
 class ImageForm extends Component {
   state = {
-    images: [
-      {
-        file: null,
-        name: "",
-        caption: ""
-      }
-    ]
+    files: [],
+    captions: []
+  };
+
+  onDrop = files => {
+    this.setState(state => ({
+      files: [...state.files, ...files],
+      captions: [
+        ...state.captions,
+        ...files.map(file => ({
+          text: ""
+        }))
+      ]
+    }));
   };
 
   handleButtonClick = event => {
@@ -39,40 +94,18 @@ class ImageForm extends Component {
     }));
   };
 
-  handleInputChange = index => {
+  handleInputChange = fileIndex => {
     return event => {
-      const { name, value } = event.target;
+      const { value } = event.target;
+
       this.setState(state => ({
-        images: state.images.map((image, imageIndex) => {
-          if (imageIndex === index) {
-            return {
-              ...image,
-              [name]: value
-            };
+        ...state,
+        captions: state.captions.map((caption, captionIndex) => {
+          if (fileIndex === captionIndex) {
+            return { text: value };
           }
 
-          return image;
-        })
-      }));
-    };
-  };
-
-  handleFileChange = index => {
-    return event => {
-      const file = event.target.files[0];
-      const name = file.name;
-      console.log(event.target.files);
-      this.setState(state => ({
-        images: state.images.map((image, imageIndex) => {
-          if (imageIndex === index) {
-            return {
-              ...image,
-              name,
-              file
-            };
-          }
-
-          return image;
+          return caption;
         })
       }));
     };
@@ -113,25 +146,33 @@ class ImageForm extends Component {
   };
 
   render() {
-    const { images } = this.state;
+    const { files, captions } = this.state;
     return (
       <div>
         <form encType="multipart/form-data">
-          {images.map((image, index) => (
-            <div key={index}>
-              <label>Upload image</label>
-              <input type="file" onChange={this.handleFileChange(index)} />
-              <label>Enter caption</label>
-              <input
-                type="text"
-                value={images[index].caption}
-                onChange={this.handleInputChange(index)}
-                name="caption"
-              />
-              <button onClick={this.removeImage(index)}>Remove Image</button>
-            </div>
-          ))}
-          <button onClick={this.handleButtonClick}>Add Image</button>
+          <Dropzone onDrop={this.onDrop}>
+            {({ getRootProps, getInputProps }) => (
+              <section className="container">
+                <div {...getRootProps({ className: "dropzone" })}>
+                  <input {...getInputProps()} />
+                  <p>Drag 'n' drop some files here, or click to select files</p>
+                </div>
+                <div>
+                  {files.map((file, index) => (
+                    <>
+                      <p>{file.name}</p>
+                      <input
+                        type="text"
+                        name="caption"
+                        value={captions[index].caption}
+                        onChange={this.handleInputChange(index)}
+                      />
+                    </>
+                  ))}
+                </div>
+              </section>
+            )}
+          </Dropzone>
           <button onClick={this.handleFormSubmit}>Save Image(s)</button>
         </form>
       </div>

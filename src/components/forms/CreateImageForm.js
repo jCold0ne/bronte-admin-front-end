@@ -117,7 +117,6 @@ class ImageForm extends Component {
 
   handleCheckboxChange = (index, category) => {
     return event => {
-      const { value, checked } = event.target;
       this.setState(state => ({
         ...state,
         data: state.data.map((item, itemIndex) => {
@@ -151,15 +150,28 @@ class ImageForm extends Component {
   };
 
   handleFormSubmit = async event => {
-    const { files, captions } = this.state;
+    const { files, data } = this.state;
     event.preventDefault();
 
-    // build up form data
     const formData = new FormData();
 
     files.forEach((file, index) => {
+      // build category array here
+      const category = [];
+      for (let item in data[index].category) {
+        if (data[index].category[item]) {
+          category.push(item);
+        }
+      }
+
+      const newData = {
+        caption: data[index].caption,
+        category
+      };
+
+      // build form data here
       formData.append("files", file);
-      formData.append(file.name, captions[index]);
+      formData.append(file.name, JSON.stringify(newData));
     });
 
     // make axios request

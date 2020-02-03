@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import axios from "axios";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -9,9 +11,11 @@ import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Alert from "@material-ui/lab/Alert";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import { setAuthToken } from "./../../actions";
 
 function Copyright() {
   return (
@@ -47,20 +51,45 @@ const styles = theme => ({
 });
 
 class SignIn extends Component {
-  handleFormSubmit = event => {
+  state = {
+    email: "",
+    password: "",
+    error: null
+  };
+
+  handleInputChange = event => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
+
+  handleFormSubmit = async event => {
+    const { email, password } = this.state;
+    const { history, setAuthToken } = this.props;
     event.preventDefault();
 
-    // handle password verification here
-
-    console.log(this.props);
-    this.props.history.push("/dashboard");
+    try {
+      // handle password verification here
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/auth/login`,
+        { email, password }
+      );
+      // set token in redux store here
+      console.log(response);
+      setAuthToken(response.data);
+      history.push("/dashboard");
+    } catch (error) {
+      console.log(error);
+      this.setState({ error: "Incorrect credentials" });
+    }
   };
 
   render() {
+    const { error } = this.state;
     const { classes } = this.props;
 
     return (
       <Container component="main" maxWidth="xs">
+        {error && <Alert severity="error">{error}</Alert>}
         <CssBaseline />
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
@@ -84,6 +113,7 @@ class SignIn extends Component {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={this.handleInputChange}
             />
             <TextField
               variant="outlined"
@@ -95,6 +125,7 @@ class SignIn extends Component {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={this.handleInputChange}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -131,4 +162,4 @@ class SignIn extends Component {
   }
 }
 
-export default withStyles(styles)(SignIn);
+export default connect(null, { setAuthToken })(withStyles(styles)(SignIn));

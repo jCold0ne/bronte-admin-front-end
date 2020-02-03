@@ -8,6 +8,7 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import ImageIcon from "@material-ui/icons/Image";
 import SettingsIcon from "@material-ui/icons/Settings";
+import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 
 export const mainListItems = (
   <div>
@@ -45,6 +46,12 @@ export const secondaryListItems = (
         <SettingsIcon />
       </ListItemIcon>
       <ListItemText primary="Settings" />
+    </ListItem>
+    <ListItem button>
+      <ListItemIcon>
+        <PowerSettingsNewIcon />
+      </ListItemIcon>
+      <ListItemText primary="Logout" />
     </ListItem>
   </div>
 );

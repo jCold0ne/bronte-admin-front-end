@@ -66,30 +66,18 @@ const styles = theme => ({
 class ImageForm extends Component {
   state = {
     files: [],
-    captions: []
+    data: []
   };
 
   onDrop = files => {
     this.setState(state => ({
       files: [...state.files, ...files],
-      captions: [
-        ...state.captions,
+      data: [
+        ...state.data,
         ...files.map(file => ({
-          text: ""
+          caption: "",
+          categories: []
         }))
-      ]
-    }));
-  };
-
-  handleButtonClick = event => {
-    event.preventDefault();
-    this.setState(state => ({
-      images: [
-        ...state.images,
-        {
-          url: "",
-          caption: ""
-        }
       ]
     }));
   };
@@ -100,27 +88,42 @@ class ImageForm extends Component {
 
       this.setState(state => ({
         ...state,
-        captions: state.captions.map((caption, captionIndex) => {
-          if (fileIndex === captionIndex) {
-            return { text: value };
+        data: state.data.map((item, itemIndex) => {
+          if (fileIndex === itemIndex) {
+            return {
+              ...item,
+              caption: value
+            };
           }
 
-          return caption;
+          return item;
         })
       }));
     };
   };
 
+  removeImage = index => {
+    return event => {
+      event.preventDefault();
+
+      // remove image object from state
+      this.setState(state => ({
+        files: state.files.filter((file, fileIndex) => index !== fileIndex),
+        data: state.data.filter((item, itemIndex) => index !== itemIndex)
+      }));
+    };
+  };
+
   handleFormSubmit = async event => {
-    const { images } = this.state;
+    const { files, captions } = this.state;
     event.preventDefault();
 
     // build up form data
     const formData = new FormData();
 
-    images.forEach((image, index) => {
-      formData.append(`images`, image.file);
-      formData.append(image.name, image.caption);
+    files.forEach((file, index) => {
+      formData.append("files", file);
+      formData.append(file.name, captions[index]);
     });
 
     // make axios request
@@ -134,22 +137,8 @@ class ImageForm extends Component {
     this.props.handleClose();
   };
 
-  removeImage = index => {
-    return event => {
-      event.preventDefault();
-
-      // remove image object from state
-      this.setState(state => ({
-        files: state.files.filter((file, fileIndex) => index !== fileIndex),
-        captions: state.captions.filter(
-          (caption, captionIndex) => index !== captionIndex
-        )
-      }));
-    };
-  };
-
   render() {
-    const { files, captions } = this.state;
+    const { files, data } = this.state;
     return (
       <div>
         <form encType="multipart/form-data">
@@ -167,7 +156,7 @@ class ImageForm extends Component {
                       <input
                         type="text"
                         name="caption"
-                        value={captions[index].caption}
+                        value={data[index].caption}
                         onChange={this.handleInputChange(index)}
                       />
                       <button onClick={this.removeImage(index)}>

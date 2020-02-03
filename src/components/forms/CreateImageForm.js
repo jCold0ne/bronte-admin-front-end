@@ -4,6 +4,11 @@ import axios from "axios";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import FormLabel from "@material-ui/core/FormLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 import { fetchImages } from "../../actions";
 import Dropzone, { useDropzone } from "react-dropzone";
 
@@ -60,6 +65,9 @@ const styles = theme => ({
   },
   input: {
     display: "none"
+  },
+  formControl: {
+    margin: theme.spacing(3)
   }
 });
 
@@ -76,7 +84,12 @@ class ImageForm extends Component {
         ...state.data,
         ...files.map(file => ({
           caption: "",
-          categories: []
+          category: {
+            blackandwhite: false,
+            portrait: false,
+            landscape: false,
+            editorial: false
+          }
         }))
       ]
     }));
@@ -93,6 +106,29 @@ class ImageForm extends Component {
             return {
               ...item,
               caption: value
+            };
+          }
+
+          return item;
+        })
+      }));
+    };
+  };
+
+  handleCheckboxChange = (index, category) => {
+    return event => {
+      const { value, checked } = event.target;
+      this.setState(state => ({
+        ...state,
+        data: state.data.map((item, itemIndex) => {
+          if (itemIndex === index) {
+            // update categories here
+            return {
+              ...item,
+              category: {
+                ...item.category,
+                [category]: !item.category[category]
+              }
             };
           }
 
@@ -153,12 +189,77 @@ class ImageForm extends Component {
                   {files.map((file, index) => (
                     <>
                       <p>{file.name}</p>
-                      <input
-                        type="text"
-                        name="caption"
-                        value={data[index].caption}
-                        onChange={this.handleInputChange(index)}
-                      />
+                      <div>
+                        <label>Caption</label>
+                        <input
+                          type="text"
+                          name="caption"
+                          value={data[index].caption}
+                          onChange={this.handleInputChange(index)}
+                        />
+                      </div>
+                      <FormControl
+                        component="fieldset"
+                        className={styles.formControl}
+                      >
+                        <FormLabel component="legend">
+                          Select Categories
+                        </FormLabel>
+                        <FormGroup>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={data[index].category.blackandwhite}
+                                onChange={this.handleCheckboxChange(
+                                  index,
+                                  "blackandwhite"
+                                )}
+                                value="blackandwhite"
+                              />
+                            }
+                            label="Black and White"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={data[index].category.portrait}
+                                onChange={this.handleCheckboxChange(
+                                  index,
+                                  "portrait"
+                                )}
+                                value="portrait"
+                              />
+                            }
+                            label="Portrait"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={data[index].category.landscape}
+                                onChange={this.handleCheckboxChange(
+                                  index,
+                                  "landscape"
+                                )}
+                                value="landscape"
+                              />
+                            }
+                            label="Landscape"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={data[index].category.editorial}
+                                onChange={this.handleCheckboxChange(
+                                  index,
+                                  "editorial"
+                                )}
+                                value="editorial"
+                              />
+                            }
+                            label="Editorial"
+                          />
+                        </FormGroup>
+                      </FormControl>
                       <button onClick={this.removeImage(index)}>
                         Remove image
                       </button>

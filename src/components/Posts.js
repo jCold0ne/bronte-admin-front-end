@@ -131,16 +131,7 @@ class Posts extends Component {
                       />
 
                       <div class="overlay">
-                        <div
-                          class="icon"
-                          onClick={event => (
-                            <ModalWrapper
-                              text="Edit"
-                              component={EditPostForm}
-                              post={post}
-                            />
-                          )}
-                        >
+                        <div class="icon" title="Edit Image">
                           <i className="fa fa-camera" aria-hidden="true"></i>
                         </div>
 

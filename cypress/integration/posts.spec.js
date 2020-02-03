@@ -3,11 +3,11 @@
 //test deleting post
 
 // P A S S E D
-describe("test that side nav buttons change endpoint", () => {
-  it("nav buttons render corresponding endpoint", () => {
-    cy.visit("http://localhost:3000/dashboard")
-      .get(".MuiListItemText-root")
-      .click({ multiple: true })
-      .url();
+describe("create post button on post route", () => {
+  it("create post button pops up form", () => {
+    cy.visit("http://localhost:3000/dashboard/posts")
+      .get(".MuiButton-containedPrimary") //find create post button
+      .click() //click
+      .get(".MuiFormControl-root"); //find form that pops up after click
   });
 });

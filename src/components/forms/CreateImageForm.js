@@ -140,7 +140,10 @@ class ImageForm extends Component {
 
       // remove image object from state
       this.setState(state => ({
-        images: state.images.filter((image, imageIndex) => index !== imageIndex)
+        files: state.files.filter((file, fileIndex) => index !== fileIndex),
+        captions: state.captions.filter(
+          (caption, captionIndex) => index !== captionIndex
+        )
       }));
     };
   };
@@ -167,6 +170,9 @@ class ImageForm extends Component {
                         value={captions[index].caption}
                         onChange={this.handleInputChange(index)}
                       />
+                      <button onClick={this.removeImage(index)}>
+                        Remove image
+                      </button>
                     </>
                   ))}
                 </div>

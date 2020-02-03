@@ -1,7 +1,8 @@
 import React, { Component, useMemo } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
-import Button from "@material-ui/core/Button";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import FormLabel from "@material-ui/core/FormLabel";
@@ -14,7 +15,7 @@ import Dropzone, { useDropzone } from "react-dropzone";
 
 const styles = theme => ({
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing
   },
   input: {
     display: "none"

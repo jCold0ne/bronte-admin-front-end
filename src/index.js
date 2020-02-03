@@ -7,6 +7,7 @@ import "typeface-roboto";
 import "filepond/dist/filepond.min.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "./components/styles/global.css";
+import "font-awesome/css/font-awesome.min.css";
 
 ReactDOM.render(
   <Provider store={store}>

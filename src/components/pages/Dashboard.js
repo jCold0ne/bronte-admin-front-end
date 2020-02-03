@@ -19,6 +19,8 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "./../ListItems";
 import Posts from "./../Posts.js";
 import Images from "./../Images.js";
+import { fetchPosts, fetchImages } from "./../../actions";
+import { connect } from "react-redux";
 
 const drawerWidth = 240;
 
@@ -106,6 +108,11 @@ class Dashboard extends Component {
     open: true
   };
 
+  async componentDidMount() {
+    await this.props.fetchPosts();
+    await this.props.fetchImages();
+  }
+
   handleDrawerOpen = () => {
     this.setState({ open: true });
   };
@@ -182,4 +189,6 @@ class Dashboard extends Component {
   }
 }
 
-export default withStyles(classes)(Dashboard);
+export default connect(null, { fetchPosts, fetchImages })(
+  withStyles(classes)(Dashboard)
+);

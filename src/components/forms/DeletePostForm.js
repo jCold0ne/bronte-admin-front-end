@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import { fetchPosts } from "../../actions";
-import { deleteFile } from "react-s3";
-// import config from "../../config/react-s3";
 import axios from "axios";
 
 class DeleteForm extends Component {
@@ -32,6 +30,26 @@ class DeleteForm extends Component {
     //   await this.props.fetchPosts(response.data);
     //   this.props.handleClose();
     // } catch (error) {}
+
+    try {
+      const { _id, imageId } = this.props.post;
+      // delete image from mongodb/s3
+      await axios.delete(
+        `${process.env.REACT_APP_SERVER_URL}/images/${imageId}`
+      );
+
+      // delete post from mongodb
+      await axios.delete(`${process.env.REACT_APP_SERVER_URL}/posts/${_id}`);
+
+      // fetch posts
+      await this.props.fetchPosts();
+
+      // close modal
+
+      this.props.handleClose();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   render() {

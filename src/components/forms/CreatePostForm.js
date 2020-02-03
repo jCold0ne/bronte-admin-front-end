@@ -47,23 +47,23 @@ class PostForm extends Component {
       );
 
       // receive url and save post/image url to mongodb
-      const post = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/posts`,
-        {
-          title,
-          body,
-          draft: false,
-          imageUrl: postImage.data[0].url,
-          imageName: postImage.data[0].name
-        }
-      );
+      await axios.post(`${process.env.REACT_APP_SERVER_URL}/posts`, {
+        title,
+        body,
+        draft: false,
+        imageUrl: postImage.data[0].url,
+        imageName: postImage.data[0].name,
+        imageId: postImage.data[0]._id
+      });
 
       // fetch posts
       await this.props.fetchPosts();
 
       // close modal
       this.props.handleClose();
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   handleFileChange = event => {

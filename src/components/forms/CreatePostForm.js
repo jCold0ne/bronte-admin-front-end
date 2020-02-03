@@ -31,10 +31,8 @@ class PostForm extends Component {
   onFormSubmit = async event => {
     event.preventDefault();
     const { title, body, image } = this.state;
-
     try {
       const data = await uploadFile(image.file, config);
-      console.log(data);
       const response = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/posts`,
         {
@@ -107,6 +105,7 @@ class PostForm extends Component {
           variant="contained"
           color="secondary"
           type="button"
+          onClick={this.onFormSubmit}
           style={{
             marginLeft: "1rem"
           }}

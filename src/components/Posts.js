@@ -21,6 +21,8 @@ import CreatePostForm from "./forms/CreatePostForm";
 import EditPostForm from "./forms/EditPostForm";
 import DeletePostForm from "./forms/DeletePostForm";
 
+import "./styles/posts.scss";
+
 const classes = theme => ({
   icon: {
     marginRight: theme.spacing(2)
@@ -117,17 +119,37 @@ class Posts extends Component {
               {posts.reverse().map(post => (
                 <Grid item key={post._id} xs={12} sm={6} md={4}>
                   <Card className={classes.card}>
-                    <CardMedia
-                      className={classes.cardMedia}
-                      image={post.imageUrl}
-                      title="Image title"
-                    />
-                    <CardContent className={classes.cardContent}>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {post.title}
-                      </Typography>
-                      <Typography>{addEllipses(post)}</Typography>
-                    </CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {post.title}
+                    </Typography>
+
+                    <div class="container">
+                      <CardMedia
+                        className={classes.cardMedia}
+                        image={post.imageUrl}
+                        title="Image title"
+                      />
+
+                      <div class="overlay">
+                        <div
+                          class="icon"
+                          onClick={event => (
+                            <ModalWrapper
+                              text="Edit"
+                              component={EditPostForm}
+                              post={post}
+                            />
+                          )}
+                        >
+                          <i className="fa fa-camera" aria-hidden="true"></i>
+                        </div>
+
+                        <CardContent className={classes.cardContent}>
+                          <Typography>{addEllipses(post)}</Typography>
+                        </CardContent>
+                      </div>
+                    </div>
+
                     <CardActions>
                       <ModalWrapper
                         text="Edit"

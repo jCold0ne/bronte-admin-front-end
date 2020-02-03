@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
-import { deleteFile, uploadFile } from "react-s3";
-// import config from "../../config/react-s3";
 import { fetchPosts } from "../../actions";
 import axios from "axios";
 
@@ -26,18 +24,19 @@ class EditForm extends Component {
     const { title, body } = this.state;
 
     try {
-      // const { _id, imageName } = this.props.post;
-      // await deleteFile(imageName, config);
-      // const response = await axios.put(
-      //   `${process.env.REACT_APP_SERVER_URL}/posts/${_id}`,
-      //   {
-      //     title,
-      //     body
-      //   }
-      // );
-      // await this.props.fetchPosts(response.data);
-      // this.props.handleClose();
-    } catch (error) {}
+      const { _id } = this.props.post;
+      const response = await axios.put(
+        `${process.env.REACT_APP_SERVER_URL}/posts/${_id}`,
+        {
+          title,
+          body
+        }
+      );
+      await this.props.fetchPosts(response.data);
+      this.props.handleClose();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   onInputChange = event => {

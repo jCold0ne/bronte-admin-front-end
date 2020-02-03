@@ -1,6 +1,7 @@
 import React, { Component, useMemo } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
+import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { withStyles } from "@material-ui/core/styles";
@@ -8,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import FormLabel from "@material-ui/core/FormLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
+import CloseIcon from "@material-ui/icons/Close";
 import { fetchImages } from "../../actions";
 import Dropzone, { useDropzone } from "react-dropzone";
 
@@ -196,7 +198,7 @@ class ImageForm extends Component {
                 </div>
                 <div>
                   {files.map((file, index) => (
-                    <>
+                    <div style={{ position: "relative" }}>
                       <p>{file.name}</p>
                       <div
                         style={{
@@ -231,22 +233,13 @@ class ImageForm extends Component {
                         </div>
                       </div>
                       <div>
-                        <label>Caption</label>
-                        <input
-                          type="text"
-                          name="caption"
-                          value={data[index].caption}
-                          onChange={this.handleInputChange(index)}
-                        />
+                        <TextField id="standard-basic" label="Caption" />
                       </div>
                       <FormControl
                         component="fieldset"
                         className={styles.formControl}
                       >
-                        <FormLabel component="legend">
-                          Select Categories
-                        </FormLabel>
-                        <FormGroup>
+                        <FormGroup row>
                           <FormControlLabel
                             control={
                               <Checkbox
@@ -301,16 +294,30 @@ class ImageForm extends Component {
                           />
                         </FormGroup>
                       </FormControl>
-                      <button onClick={this.removeImage(index)}>
-                        Remove image
-                      </button>
-                    </>
+
+                      <CloseIcon
+                        onClick={this.removeImage(index)}
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          right: 0,
+                          cursor: "pointer"
+                        }}
+                      />
+                    </div>
                   ))}
                 </div>
               </section>
             )}
           </Dropzone>
-          <button onClick={this.handleFormSubmit}>Save Image(s)</button>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ marginTop: "2rem" }}
+            onClick={this.handleFormSubmit}
+          >
+            Save Image(s)
+          </Button>
         </form>
       </div>
     );

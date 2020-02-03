@@ -3,8 +3,6 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import { fetchPosts } from "../../actions";
-import { uploadFile } from "react-s3";
-import config from "../../config/react-s3";
 import axios from "axios";
 
 class PostForm extends Component {
@@ -12,7 +10,8 @@ class PostForm extends Component {
     title: "",
     body: "",
     image: null,
-    error: null
+    error: null,
+    url: null
   };
 
   componentDidMount() {
@@ -32,17 +31,37 @@ class PostForm extends Component {
     event.preventDefault();
     const { title, body, image } = this.state;
     try {
-      const data = await uploadFile(image.file, config);
-      const response = await axios.post(
+      // build formdata
+      const data = {
+        caption: "",
+        category: ["post"]
+      };
+      const formData = new FormData();
+      formData.append("files", image.file);
+      formData.append(image.name, JSON.stringify(data));
+
+      // send image to express to save to s3/db
+      const postImage = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/images`,
+        formData
+      );
+
+      // receive url and save post/image url to mongodb
+      const post = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/posts`,
         {
           title,
           body,
-          imageUrl: data.location,
-          imageName: image.name
+          draft: false,
+          imageUrl: postImage.data[0].url,
+          imageName: postImage.data[0].name
         }
       );
-      await this.props.fetchPosts(response.data);
+
+      // fetch posts
+      await this.props.fetchPosts();
+
+      // close modal
       this.props.handleClose();
     } catch (error) {}
   };

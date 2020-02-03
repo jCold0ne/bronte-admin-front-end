@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import { fetchPosts } from "../../actions";
 import { deleteFile } from "react-s3";
-import config from "../../config/react-s3";
+// import config from "../../config/react-s3";
 import axios from "axios";
 
 class DeleteForm extends Component {
@@ -23,15 +23,15 @@ class DeleteForm extends Component {
   onFormSubmit = async event => {
     event.preventDefault();
 
-    try {
-      const { _id, imageName } = this.props.post;
-      await deleteFile(imageName, config);
-      const response = await axios.delete(
-        `${process.env.REACT_APP_SERVER_URL}/posts/${_id}`
-      );
-      await this.props.fetchPosts(response.data);
-      this.props.handleClose();
-    } catch (error) {}
+    // try {
+    //   const { _id, imageName } = this.props.post;
+    //   await deleteFile(imageName, config);
+    //   const response = await axios.delete(
+    //     `${process.env.REACT_APP_SERVER_URL}/posts/${_id}`
+    //   );
+    //   await this.props.fetchPosts(response.data);
+    //   this.props.handleClose();
+    // } catch (error) {}
   };
 
   render() {

@@ -11,6 +11,7 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "./components/styles/global.css";
 import "font-awesome/css/font-awesome.min.css";
 
+//Changing Material-UI's preset colour themes
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -24,6 +25,7 @@ const theme = createMuiTheme({
   }
 });
 
+//Wrapping App with Redux and a customized Theme
 ReactDOM.render(
   <Provider store={store}>
     <ThemeProvider theme={theme}>

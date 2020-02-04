@@ -182,6 +182,7 @@ class Dashboard extends Component {
                 <Route path="/dashboard/images" component={Images} />
               </Switch>
             </Grid>
+            <img src="./../../images/dinosaur.jpg" alt="dinosaur" />
           </Container>
         </main>
       </div>

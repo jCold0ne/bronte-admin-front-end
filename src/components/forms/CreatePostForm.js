@@ -37,8 +37,10 @@ class PostForm extends Component {
   };
 
   onFormSubmit = async event => {
-    event.preventDefault();
     const { title, body, image, galleryImage } = this.state;
+    const { token } = this.props;
+    event.preventDefault();
+
     try {
       if (image) {
         // if new image must be uploaded to s3 for blog post
@@ -55,28 +57,49 @@ class PostForm extends Component {
         // send image to express to save to s3/db
         const postImage = await axios.post(
           `${process.env.REACT_APP_SERVER_URL}/images`,
-          formData
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
 
         // receive url and save post/image url to mongodb
-        await axios.post(`${process.env.REACT_APP_SERVER_URL}/posts`, {
-          title,
-          body,
-          draft: false,
-          imageUrl: postImage.data[0].url,
-          imageName: postImage.data[0].name,
-          imageId: postImage.data[0]._id
-        });
+        await axios.post(
+          `${process.env.REACT_APP_SERVER_URL}/posts`,
+          {
+            title,
+            body,
+            draft: false,
+            imageUrl: postImage.data[0].url,
+            imageName: postImage.data[0].name,
+            imageId: postImage.data[0]._id
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
       } else if (galleryImage) {
         // if user is selecting preuploaded image from database
-        await axios.post(`${process.env.REACT_APP_SERVER_URL}/posts`, {
-          title,
-          body,
-          draft: false,
-          imageUrl: galleryImage.url,
-          imageName: galleryImage.name,
-          imageId: galleryImage._id
-        });
+        await axios.post(
+          `${process.env.REACT_APP_SERVER_URL}/posts`,
+          {
+            title,
+            body,
+            draft: false,
+            imageUrl: galleryImage.url,
+            imageName: galleryImage.name,
+            imageId: galleryImage._id
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
       }
 
       // fetch posts
@@ -191,4 +214,8 @@ class PostForm extends Component {
   }
 }
 
-export default connect(null, { fetchPosts, fetchImages })(PostForm);
+const mapStateToProps = state => ({
+  token: state.auth.token
+});
+
+export default connect(mapStateToProps, { fetchPosts, fetchImages })(PostForm);

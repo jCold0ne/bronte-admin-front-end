@@ -8,6 +8,13 @@ export const setAuthToken = (token = null) => {
   };
 };
 
+export const removeAuthToken = () => {
+  sessionStorage.removeItem("token");
+  return {
+    type: "REMOVE_AUTH_TOKEN"
+  };
+};
+
 export const fetchPosts = () => {
   return async (dispatch, getState) => {
     let response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/posts`);

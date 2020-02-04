@@ -38,20 +38,3 @@ export const mainListItems = (
     </Link>
   </div>
 );
-
-export const secondaryListItems = (
-  <div>
-    <ListItem button>
-      <ListItemIcon>
-        <SettingsIcon />
-      </ListItemIcon>
-      <ListItemText primary="Settings" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <PowerSettingsNewIcon />
-      </ListItemIcon>
-      <ListItemText primary="Logout" />
-    </ListItem>
-  </div>
-);

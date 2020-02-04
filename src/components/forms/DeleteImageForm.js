@@ -6,11 +6,16 @@ import axios from "axios";
 
 class DeleteImageForm extends Component {
   onFormSubmit = async event => {
+    const { token } = this.props;
     const { _id } = this.props.image;
     event.preventDefault();
 
     try {
-      await axios.delete(`${process.env.REACT_APP_SERVER_URL}/images/${_id}`);
+      await axios.delete(`${process.env.REACT_APP_SERVER_URL}/images/${_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       await this.props.fetchImages();
       this.props.handleClose();
     } catch (error) {
@@ -41,4 +46,8 @@ class DeleteImageForm extends Component {
   }
 }
 
-export default connect(null, { fetchImages })(DeleteImageForm);
+const mapStateToProps = state => ({
+  token: state.auth.token
+});
+
+export default connect(mapStateToProps, { fetchImages })(DeleteImageForm);

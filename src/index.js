@@ -14,11 +14,11 @@ import "font-awesome/css/font-awesome.min.css";
 const theme = createMuiTheme({
   palette: {
     primary: {
-      // Purple and green play nicely together.
+      // Pink
       main: "#FFDBDD"
     },
     secondary: {
-      // This is green.A700 as hex.
+      // Dark Pink
       main: "#D3A6A9"
     }
   }

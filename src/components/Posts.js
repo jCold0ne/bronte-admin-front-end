@@ -78,7 +78,6 @@ class Posts extends Component {
         <CssBaseline />
 
         <main>
-          {/* Hero unit */}
           <div className={classes.heroContent}>
             <Container maxWidth="sm">
               <Typography
@@ -89,16 +88,6 @@ class Posts extends Component {
                 gutterBottom
               >
                 Posts
-              </Typography>
-              <Typography
-                variant="h5"
-                align="center"
-                color="textSecondary"
-                paragraph
-              >
-                Something short and leading about the collection below—its
-                contents, the creator, etc. Make it short and sweet, but not too
-                short so folks don&apos;t simply skip over it entirely.
               </Typography>
 
               <div className={classes.heroButtons}>
@@ -114,7 +103,6 @@ class Posts extends Component {
             </Container>
           </div>
           <Container className={classes.cardGrid} maxWidth="md">
-            {/* End hero unit */}
             <Grid container spacing={4}>
               {posts.reverse().map(post => (
                 <Grid item key={post._id} xs={12} sm={6} md={4}>

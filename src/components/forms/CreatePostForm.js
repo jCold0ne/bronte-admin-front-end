@@ -176,15 +176,6 @@ class PostForm extends Component {
 
         <Button
           variant="contained"
-          color="secondary"
-          type="button"
-          onClick={this.onFormSubmit}
-        >
-          Save Draft
-        </Button>
-
-        <Button
-          variant="contained"
           color="primary"
           type="button"
           onClick={this.onFormSubmit}

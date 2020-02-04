@@ -105,6 +105,7 @@ class ImageForm extends Component {
 
   handleFormSubmit = async event => {
     const { files, data } = this.state;
+    const { token } = this.props;
     event.preventDefault();
 
     const formData = new FormData();
@@ -130,11 +131,12 @@ class ImageForm extends Component {
 
     // make axios request
 
-    const image = await axios.post(
-      `${process.env.REACT_APP_SERVER_URL}/images`,
-      formData
-    );
-    console.log(data);
+    await axios.post(`${process.env.REACT_APP_SERVER_URL}/images`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
     // update redux state to show new uploads
     this.props.fetchImages();
 
@@ -331,4 +333,10 @@ class ImageForm extends Component {
   }
 }
 
-export default connect(null, { fetchImages })(withStyles(styles)(ImageForm));
+const mapStateToProps = state => ({
+  token: state.auth.token
+});
+
+export default connect(mapStateToProps, { fetchImages })(
+  withStyles(styles)(ImageForm)
+);

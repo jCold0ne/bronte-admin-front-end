@@ -44,13 +44,7 @@ class EditImageForm extends Component {
   componentDidMount() {
     // setup category object
     const { category: categories } = this.props.image;
-    const defaultCategories = [
-      "blackandwhite",
-      "portrait",
-      "landscape",
-      "editorial",
-      "post"
-    ];
+    const defaultCategories = Object.keys(this.state.category);
     const categoryObject = {};
     defaultCategories.forEach(category => {
       if (categories.includes(category)) {
@@ -59,7 +53,7 @@ class EditImageForm extends Component {
         categoryObject[category] = false;
       }
     });
-    console.log(categoryObject);
+
     this.setState({
       caption: this.props.image.caption,
       category: categoryObject
@@ -85,7 +79,9 @@ class EditImageForm extends Component {
 
   handleFormSubmit = async event => {
     const { caption, category: categoryObject } = this.state;
+    const { token } = this.props;
     const { _id } = this.props.image;
+
     event.preventDefault();
 
     // build categories array
@@ -96,10 +92,18 @@ class EditImageForm extends Component {
       }
     }
 
-    await axios.put(`${process.env.REACT_APP_SERVER_URL}/images/${_id}`, {
-      caption,
-      category: categoryArray
-    });
+    await axios.put(
+      `${process.env.REACT_APP_SERVER_URL}/images/${_id}`,
+      {
+        caption,
+        category: categoryArray
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
 
     this.props.fetchImages();
 
@@ -204,6 +208,10 @@ class EditImageForm extends Component {
   }
 }
 
-export default connect(null, { fetchImages })(
+const mapStateToProps = state => ({
+  token: state.auth.token
+});
+
+export default connect(mapStateToProps, { fetchImages })(
   withStyles(styles)(EditImageForm)
 );

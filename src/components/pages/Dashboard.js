@@ -21,6 +21,7 @@ import Posts from "./../Posts.js";
 import Images from "./../Images.js";
 import { fetchPosts, fetchImages } from "./../../actions";
 import { connect } from "react-redux";
+import Dinosaur from "../Dinosaur.js";
 
 const drawerWidth = 240;
 
@@ -180,9 +181,9 @@ class Dashboard extends Component {
               <Switch>
                 <Route path="/dashboard/posts" component={Posts} />
                 <Route path="/dashboard/images" component={Images} />
+                <Route path="/dashboard" component={Dinosaur} />
               </Switch>
             </Grid>
-            <img src="./../../images/dinosaur.jpg" alt="dinosaur" />
           </Container>
         </main>
       </div>

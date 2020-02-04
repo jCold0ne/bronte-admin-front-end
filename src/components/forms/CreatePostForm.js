@@ -134,7 +134,7 @@ class PostForm extends Component {
               }}
             >
               <img
-                src={URL.createObjectURL(image) || galleryImage.url}
+                src={image ? URL.createObjectURL(image) : galleryImage.url}
                 alt="Preview"
                 style={{
                   display: "block",

@@ -19,27 +19,27 @@ class DeleteForm extends Component {
   }
 
   onFormSubmit = async event => {
+    const { token } = this.props;
+    const { _id, imageId } = this.props.post;
     event.preventDefault();
 
-    // try {
-    //   const { _id, imageName } = this.props.post;
-    //   await deleteFile(imageName, config);
-    //   const response = await axios.delete(
-    //     `${process.env.REACT_APP_SERVER_URL}/posts/${_id}`
-    //   );
-    //   await this.props.fetchPosts(response.data);
-    //   this.props.handleClose();
-    // } catch (error) {}
-
     try {
-      const { _id, imageId } = this.props.post;
       // delete image from mongodb/s3
       await axios.delete(
-        `${process.env.REACT_APP_SERVER_URL}/images/${imageId}`
+        `${process.env.REACT_APP_SERVER_URL}/images/${imageId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
       );
 
       // delete post from mongodb
-      await axios.delete(`${process.env.REACT_APP_SERVER_URL}/posts/${_id}`);
+      await axios.delete(`${process.env.REACT_APP_SERVER_URL}/posts/${_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
 
       // fetch posts
       await this.props.fetchPosts();
@@ -78,4 +78,10 @@ class DeleteForm extends Component {
   }
 }
 
-export default connect(null, { fetchPosts, fetchImages })(DeleteForm);
+const mapStateToProps = state => ({
+  token: state.auth.token
+});
+
+export default connect(mapStateToProps, { fetchPosts, fetchImages })(
+  DeleteForm
+);

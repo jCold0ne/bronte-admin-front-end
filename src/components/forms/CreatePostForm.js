@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
-import { fetchPosts } from "../../actions";
+import { fetchPosts, fetchImages } from "../../actions";
 import axios from "axios";
+import ModalWrapper from "./../ModalWrapper";
+import PostImageForm from "./../forms/PostImageForm";
 
 class PostForm extends Component {
   state = {
@@ -11,7 +13,7 @@ class PostForm extends Component {
     body: "",
     image: null,
     error: null,
-    url: null
+    galleryImage: null
   };
 
   componentDidMount() {
@@ -22,6 +24,13 @@ class PostForm extends Component {
     }
   }
 
+  onDrop = file => {
+    this.setState({
+      galleryImage: null,
+      image: file
+    });
+  };
+
   onInputChange = event => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
@@ -29,35 +38,52 @@ class PostForm extends Component {
 
   onFormSubmit = async event => {
     event.preventDefault();
-    const { title, body, image } = this.state;
+    const { title, body, image, galleryImage } = this.state;
     try {
-      // build formdata
-      const data = {
-        caption: "",
-        category: ["post"]
-      };
-      const formData = new FormData();
-      formData.append("files", image.file);
-      formData.append(image.name, JSON.stringify(data));
+      if (image) {
+        // if new image must be uploaded to s3 for blog post
 
-      // send image to express to save to s3/db
-      const postImage = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/images`,
-        formData
-      );
+        // build formdata
+        const data = {
+          caption: "",
+          category: ["post"]
+        };
+        const formData = new FormData();
+        formData.append("files", image);
+        formData.append(image.name, JSON.stringify(data));
 
-      // receive url and save post/image url to mongodb
-      await axios.post(`${process.env.REACT_APP_SERVER_URL}/posts`, {
-        title,
-        body,
-        draft: false,
-        imageUrl: postImage.data[0].url,
-        imageName: postImage.data[0].name,
-        imageId: postImage.data[0]._id
-      });
+        // send image to express to save to s3/db
+        const postImage = await axios.post(
+          `${process.env.REACT_APP_SERVER_URL}/images`,
+          formData
+        );
+
+        // receive url and save post/image url to mongodb
+        await axios.post(`${process.env.REACT_APP_SERVER_URL}/posts`, {
+          title,
+          body,
+          draft: false,
+          imageUrl: postImage.data[0].url,
+          imageName: postImage.data[0].name,
+          imageId: postImage.data[0]._id
+        });
+      } else if (galleryImage) {
+        // if user is selecting preuploaded image from database
+        await axios.post(`${process.env.REACT_APP_SERVER_URL}/posts`, {
+          title,
+          body,
+          draft: false,
+          imageUrl: galleryImage.url,
+          imageName: galleryImage.name,
+          imageId: galleryImage._id
+        });
+      }
 
       // fetch posts
       await this.props.fetchPosts();
+
+      // fetch images
+      await this.props.fetchImages();
 
       // close modal
       this.props.handleClose();
@@ -78,11 +104,48 @@ class PostForm extends Component {
     });
   };
 
+  setImage = galleryImage => {
+    this.setState({ image: null, galleryImage });
+  };
+
   render() {
-    const { title, body } = this.state;
+    const { title, body, galleryImage, image } = this.state;
 
     return (
       <form>
+        {(galleryImage || image) && (
+          <div
+            style={{
+              display: "inline-flex",
+              borderRadius: 2,
+              marginBottom: 8,
+              marginRight: 8,
+              width: 100,
+              height: 100,
+              padding: 4,
+              boxSizing: "border-box"
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                minWidth: 0,
+                overflow: "hidden"
+              }}
+            >
+              <img
+                src={image ? URL.createObjectURL(image) : galleryImage.url}
+                alt="Preview"
+                style={{
+                  display: "block",
+                  width: "auto",
+                  height: "100%"
+                }}
+              />
+            </div>
+          </div>
+        )}
+
         <TextField
           name="title"
           value={title}
@@ -104,33 +167,12 @@ class PostForm extends Component {
             shrink: true
           }}
         />
-        <Button variant="contained" color="primary" type="button">
-          <input type="file" onChange={this.handleFileChange} />
-        </Button>
-
-        <Button
-          variant="contained"
-          color="primary"
-          type="button"
-          onClick={this.onFormSubmit}
-          style={{
-            marginLeft: "1rem"
-          }}
-        >
-          Upload Gallery Image
-        </Button>
-
-        <Button
-          variant="contained"
-          color="secondary"
-          type="button"
-          onClick={this.onFormSubmit}
-          style={{
-            marginLeft: "1rem"
-          }}
-        >
-          Save Draft
-        </Button>
+        <ModalWrapper
+          text="Select Post Image"
+          component={PostImageForm}
+          setImage={this.setImage}
+          onDrop={this.onDrop}
+        />
 
         <Button
           variant="contained"
@@ -149,4 +191,4 @@ class PostForm extends Component {
   }
 }
 
-export default connect(null, { fetchPosts })(PostForm);
+export default connect(null, { fetchPosts, fetchImages })(PostForm);

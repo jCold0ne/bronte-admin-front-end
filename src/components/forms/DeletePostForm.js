@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
-import { fetchPosts } from "../../actions";
+import { fetchPosts, fetchImages } from "../../actions";
 import axios from "axios";
 
 class DeleteForm extends Component {
@@ -44,6 +44,9 @@ class DeleteForm extends Component {
       // fetch posts
       await this.props.fetchPosts();
 
+      // fetch images
+      await this.props.fetchImages();
+
       // close modal
 
       this.props.handleClose();
@@ -75,4 +78,4 @@ class DeleteForm extends Component {
   }
 }
 
-export default connect(null, { fetchPosts })(DeleteForm);
+export default connect(null, { fetchPosts, fetchImages })(DeleteForm);

@@ -39,7 +39,7 @@ const styles = theme => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.primary.main
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -105,6 +105,7 @@ class SignIn extends Component {
           >
             <TextField
               variant="outlined"
+              color="secondary"
               margin="normal"
               required
               fullWidth
@@ -117,6 +118,7 @@ class SignIn extends Component {
             />
             <TextField
               variant="outlined"
+              color="secondary"
               margin="normal"
               required
               fullWidth
@@ -127,10 +129,7 @@ class SignIn extends Component {
               autoComplete="current-password"
               onChange={this.handleInputChange}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+
             <Button
               type="submit"
               fullWidth
@@ -140,20 +139,9 @@ class SignIn extends Component {
             >
               Sign In
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
           </form>
         </div>
+
         <Box mt={8}>
           <Copyright />
         </Box>

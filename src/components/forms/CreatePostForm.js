@@ -24,6 +24,13 @@ class PostForm extends Component {
     }
   }
 
+  onDrop = file => {
+    this.setState({
+      url: null,
+      image: file
+    });
+  };
+
   onInputChange = event => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
@@ -81,14 +88,78 @@ class PostForm extends Component {
   };
 
   setImageUrl = url => {
-    this.setState({ url });
+    this.setState({ image: null, url });
   };
 
   render() {
-    const { title, body } = this.state;
+    const { title, body, url, image } = this.state;
 
     return (
       <form>
+        {url && (
+          <div
+            style={{
+              display: "inline-flex",
+              borderRadius: 2,
+              marginBottom: 8,
+              marginRight: 8,
+              width: 100,
+              height: 100,
+              padding: 4,
+              boxSizing: "border-box"
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                minWidth: 0,
+                overflow: "hidden"
+              }}
+            >
+              <img
+                src={url}
+                alt="Preview"
+                style={{
+                  display: "block",
+                  width: "auto",
+                  height: "100%"
+                }}
+              />
+            </div>
+          </div>
+        )}
+        {image && (
+          <div
+            style={{
+              display: "inline-flex",
+              borderRadius: 2,
+              marginBottom: 8,
+              marginRight: 8,
+              width: 100,
+              height: 100,
+              padding: 4,
+              boxSizing: "border-box"
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                minWidth: 0,
+                overflow: "hidden"
+              }}
+            >
+              <img
+                src={URL.createObjectURL(image)}
+                alt="Preview"
+                style={{
+                  display: "block",
+                  width: "auto",
+                  height: "100%"
+                }}
+              />
+            </div>
+          </div>
+        )}
         <TextField
           name="title"
           value={title}
@@ -113,22 +184,11 @@ class PostForm extends Component {
         <Button variant="contained" color="primary" type="button">
           <input type="file" onChange={this.handleFileChange} />
         </Button>
-
-        {/* <Button
-          variant="contained"
-          color="primary"
-          type="button"
-          onClick={this.onFormSubmit}
-          style={{
-            marginLeft: "1rem"
-          }}
-        >
-          Upload Gallery Image
-        </Button> */}
         <ModalWrapper
           text="Select Post Image"
           component={PostImageForm}
           setImageUrl={this.setImageUrl}
+          onDrop={this.onDrop}
         />
 
         <Button

@@ -1,23 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Dropzone from "react-dropzone";
-import Button from "@material-ui/core/Button";
 
 class PostImageForm extends Component {
-  state = {
-    url: null
-  };
-
-  handleImageClick = url => {
+  selectImage = image => {
     return () => {
-      this.setState({ url });
+      this.props.setImage(image);
+      this.props.handleClose();
     };
-  };
-
-  selectImage = () => {
-    const { url } = this.state;
-    this.props.setImageUrl(url);
-    this.props.handleClose();
   };
 
   handleOnDrop = files => {
@@ -57,7 +47,6 @@ class PostImageForm extends Component {
   };
 
   render() {
-    const { url } = this.state;
     const { images } = this.props;
     return (
       <div>
@@ -96,7 +85,6 @@ class PostImageForm extends Component {
                 style={{
                   display: "inline-flex",
                   borderRadius: 2,
-                  border: url === image.url ? "1px solid #eaeaea" : "none",
                   marginBottom: 8,
                   marginRight: 8,
                   width: 100,
@@ -106,7 +94,7 @@ class PostImageForm extends Component {
                   cursor: "pointer"
                 }}
                 key={image._id}
-                onClick={this.handleImageClick(image.url)}
+                onClick={this.selectImage(image)}
               >
                 <div
                   style={{
@@ -128,14 +116,6 @@ class PostImageForm extends Component {
               </div>
             );
           })}
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ marginTop: "2rem" }}
-            onClick={this.selectImage}
-          >
-            Select Image
-          </Button>
         </div>
       </div>
     );

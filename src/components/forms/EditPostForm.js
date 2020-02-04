@@ -5,30 +5,43 @@ import { connect } from "react-redux";
 import { fetchPosts } from "../../actions";
 import axios from "axios";
 
-class PostForm extends Component {
+class EditForm extends Component {
   state = {
     title: "",
     body: "",
+    imageName: "",
+    imageUrl: "",
     error: null
   };
 
-  onInputChange = event => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
-  };
+  componentDidMount() {
+    const { title, body } = this.props.post;
+    this.setState({ title, body });
+  }
 
   onFormSubmit = async event => {
     event.preventDefault();
     const { title, body } = this.state;
 
     try {
-      const response = await axios.post("http://localhost:3000/posts", {
-        title,
-        body
-      });
+      const { _id } = this.props.post;
+      const response = await axios.put(
+        `${process.env.REACT_APP_SERVER_URL}/posts/${_id}`,
+        {
+          title,
+          body
+        }
+      );
       await this.props.fetchPosts(response.data);
       this.props.handleClose();
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  onInputChange = event => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
   };
 
   render() {
@@ -45,39 +58,30 @@ class PostForm extends Component {
         />
         <TextField
           name="body"
+          value={body}
+          onChange={this.onInputChange}
           id="standard-multiline-full-width"
           label="Body"
           multiline
           rowsMax="10"
-          value={body}
-          onChange={this.onInputChange}
           margin="normal"
           fullWidth
           InputLabelProps={{
             shrink: true
           }}
         />
+
         <Button
           variant="contained"
           color="primary"
           type="button"
           onClick={this.onFormSubmit}
         >
-          Create Post
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          type="button"
-          style={{
-            marginLeft: "1rem"
-          }}
-        >
-          Save Draft
+          Edit Post
         </Button>
       </form>
     );
   }
 }
 
-export default connect(null, { fetchPosts })(PostForm);
+export default connect(null, { fetchPosts })(EditForm);

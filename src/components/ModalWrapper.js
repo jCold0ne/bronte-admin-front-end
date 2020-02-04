@@ -15,7 +15,10 @@ const classes = theme => ({
     backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3)
+    padding: theme.spacing(2, 4, 3),
+    overflow: "scroll",
+    height: "50%",
+    width: "50%"
   }
 });
 
@@ -40,8 +43,8 @@ class ModalWrapper extends Component {
     return (
       <div>
         <Button
-          variant="contained"
-          color="primary"
+          variant={text === "Delete" ? "outlined" : "contained"}
+          color={text === "Delete" ? "secondary" : "primary"}
           onClick={this.handleOpen}
           type="button"
         >

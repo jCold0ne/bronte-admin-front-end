@@ -1,4 +1,4 @@
-import React, { Component, useMemo } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
 import Button from "@material-ui/core/Button";
@@ -11,7 +11,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import CloseIcon from "@material-ui/icons/Close";
 import { fetchImages } from "../../actions";
-import Dropzone, { useDropzone } from "react-dropzone";
+import Dropzone from "react-dropzone";
 
 const styles = theme => ({
   button: {
@@ -130,8 +130,11 @@ class ImageForm extends Component {
 
     // make axios request
 
-    await axios.post(`${process.env.REACT_APP_SERVER_URL}/images`, formData);
-
+    const image = await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/images`,
+      formData
+    );
+    console.log(data);
     // update redux state to show new uploads
     this.props.fetchImages();
 
@@ -233,7 +236,11 @@ class ImageForm extends Component {
                         </div>
                       </div>
                       <div>
-                        <TextField id="standard-basic" label="Caption" />
+                        <TextField
+                          id="standard-basic"
+                          label="Caption"
+                          onChange={this.handleInputChange(index)}
+                        />
                       </div>
                       <FormControl
                         component="fieldset"

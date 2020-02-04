@@ -34,7 +34,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "cypress open",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "git checkout master && npm run build && aws s3 sync build/ s3://bronte-admin-front-end"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -9,6 +9,11 @@ export default (state = defaultState, action) => {
         ...state,
         token: action.payload
       };
+    case "REMOVE_AUTH_TOKEN":
+      return {
+        ...state,
+        token: null
+      };
     default:
       return state;
   }

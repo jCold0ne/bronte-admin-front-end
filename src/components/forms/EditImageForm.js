@@ -1,11 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { uploadFile } from "react-s3";
 import axios from "axios";
-import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
-import CardMedia from "@material-ui/core/CardMedia";
-import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";

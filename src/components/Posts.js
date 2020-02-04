@@ -1,27 +1,19 @@
 import React, { Component } from "react";
-// import axios from "axios";
 import { connect } from "react-redux";
 import { fetchPosts } from "./../actions";
-// import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
-// import CameraIcon from "@material-ui/icons/PhotoCamera";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
-// import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-// import Link from "@material-ui/core/Link";
 import ModalWrapper from "./ModalWrapper";
 import CreatePostForm from "./forms/CreatePostForm";
 import EditPostForm from "./forms/EditPostForm";
 import DeletePostForm from "./forms/DeletePostForm";
-
-import "./styles/posts.scss";
 
 const classes = theme => ({
   icon: {
@@ -111,23 +103,15 @@ class Posts extends Component {
                       {post.title}
                     </Typography>
 
-                    <div class="container">
-                      <CardMedia
-                        className={classes.cardMedia}
-                        image={post.imageUrl}
-                        title="Image title"
-                      />
+                    <CardMedia
+                      className={classes.cardMedia}
+                      image={post.imageUrl}
+                      title="Image title"
+                    />
 
-                      <div class="overlay">
-                        <div class="icon" title="Edit Image">
-                          <i className="fa fa-camera" aria-hidden="true"></i>
-                        </div>
-
-                        <CardContent className={classes.cardContent}>
-                          <Typography>{addEllipses(post)}</Typography>
-                        </CardContent>
-                      </div>
-                    </div>
+                    <CardContent className={classes.cardContent}>
+                      <Typography>{addEllipses(post)}</Typography>
+                    </CardContent>
 
                     <CardActions>
                       <ModalWrapper

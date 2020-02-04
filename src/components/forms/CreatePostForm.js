@@ -4,6 +4,8 @@ import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import { fetchPosts } from "../../actions";
 import axios from "axios";
+import ModalWrapper from "./../ModalWrapper";
+import PostImageForm from "./../forms/PostImageForm";
 
 class PostForm extends Component {
   state = {
@@ -78,6 +80,10 @@ class PostForm extends Component {
     });
   };
 
+  setImageUrl = url => {
+    this.setState({ url });
+  };
+
   render() {
     const { title, body } = this.state;
 
@@ -108,7 +114,7 @@ class PostForm extends Component {
           <input type="file" onChange={this.handleFileChange} />
         </Button>
 
-        <Button
+        {/* <Button
           variant="contained"
           color="primary"
           type="button"
@@ -118,7 +124,12 @@ class PostForm extends Component {
           }}
         >
           Upload Gallery Image
-        </Button>
+        </Button> */}
+        <ModalWrapper
+          text="Select Post Image"
+          component={PostImageForm}
+          setImageUrl={this.setImageUrl}
+        />
 
         <Button
           variant="contained"

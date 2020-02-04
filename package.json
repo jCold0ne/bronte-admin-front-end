@@ -1,6 +1,9 @@
 {
   "name": "bronte-admin-front-end",
   "version": "0.1.0",
+  "engines": {
+    "node": "10.16.3"
+  },
   "private": true,
   "dependencies": {
     "@fortawesome/free-regular-svg-icons": "^5.12.0",

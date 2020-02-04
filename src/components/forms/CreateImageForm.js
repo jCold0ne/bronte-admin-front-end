@@ -1,10 +1,17 @@
-import React, { Component } from "react";
+import React, { Component, useMemo } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
+import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { withStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import FormLabel from "@material-ui/core/FormLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormGroup from "@material-ui/core/FormGroup";
+import CloseIcon from "@material-ui/icons/Close";
 import { fetchImages } from "../../actions";
+import Dropzone, { useDropzone } from "react-dropzone";
 
 const styles = theme => ({
   button: {
@@ -12,106 +19,113 @@ const styles = theme => ({
   },
   input: {
     display: "none"
+  },
+  formControl: {
+    margin: theme.spacing(3)
   }
 });
 
 class ImageForm extends Component {
   state = {
-    blackandwhite: false,
-    portrait: false,
-    landscape: false,
-    editorial: false,
-    images: [
-      {
-        file: null,
-        name: "",
-        caption: ""
-      }
-    ]
+    files: [],
+    data: []
   };
 
-  //Checkbox onclick
-  handleChange = event => {
-    event.preventDefault();
-    const { value } = event.target;
-    console.log(value);
+  onDrop = files => {
     this.setState(state => ({
-      [value]: !state[value]
-    }));
-  };
-
-  handleButtonClick = event => {
-    event.preventDefault();
-    this.setState(state => ({
-      images: [
-        ...state.images,
-        {
-          url: "",
-          caption: ""
-        }
+      files: [...state.files, ...files],
+      data: [
+        ...state.data,
+        ...files.map(file => ({
+          caption: "",
+          category: {
+            blackandwhite: false,
+            portrait: false,
+            landscape: false,
+            editorial: false
+          }
+        }))
       ]
     }));
   };
 
-  handleInputChange = index => {
+  handleInputChange = fileIndex => {
     return event => {
-      const { name, value } = event.target;
+      const { value } = event.target;
+
       this.setState(state => ({
-        images: state.images.map((image, imageIndex) => {
-          if (imageIndex === index) {
+        ...state,
+        data: state.data.map((item, itemIndex) => {
+          if (fileIndex === itemIndex) {
             return {
-              ...image,
-              [name]: value
+              ...item,
+              caption: value
             };
           }
 
-          return image;
+          return item;
         })
       }));
     };
   };
 
-  handleFileChange = index => {
+  handleCheckboxChange = (index, category) => {
     return event => {
-      const file = event.target.files[0];
-      const name = file.name;
-      console.log(event.target.files);
       this.setState(state => ({
-        images: state.images.map((image, imageIndex) => {
-          if (imageIndex === index) {
+        ...state,
+        data: state.data.map((item, itemIndex) => {
+          if (itemIndex === index) {
+            // update categories here
             return {
-              ...image,
-              name,
-              file
+              ...item,
+              category: {
+                ...item.category,
+                [category]: !item.category[category]
+              }
             };
           }
 
-          return image;
+          return item;
         })
+      }));
+    };
+  };
+
+  removeImage = index => {
+    return event => {
+      event.preventDefault();
+
+      // remove image object from state
+      this.setState(state => ({
+        files: state.files.filter((file, fileIndex) => index !== fileIndex),
+        data: state.data.filter((item, itemIndex) => index !== itemIndex)
       }));
     };
   };
 
   handleFormSubmit = async event => {
-    const { images } = this.state;
-    const { value } = event.target;
+    const { files, data } = this.state;
     event.preventDefault();
 
-    // build up form data
     const formData = new FormData();
 
+    files.forEach((file, index) => {
+      // build category array here
+      const category = [];
+      for (let item in data[index].category) {
+        if (data[index].category[item]) {
+          category.push(item);
+        }
+      }
 
-    const morePromises = data.map((image, index) => {
-      return axios.post(`${process.env.REACT_APP_SERVER_URL}/images`, {
-        url: image.location,
-        caption: images[index].caption,
-        name: images[index].name,
-        category: [value]
-      });
+      const newData = {
+        caption: data[index].caption,
+        category
+      };
 
-    images.forEach((image, index) => {
-      formData.append(`images`, image.file);
-      formData.append(image.name, image.caption);
+      // build form data here
+      formData.append("files", file);
+      formData.append(file.name, JSON.stringify(newData));
     });
 
     // make axios request
@@ -125,82 +139,185 @@ class ImageForm extends Component {
     this.props.handleClose();
   };
 
-  removeImage = index => {
-    return event => {
-      event.preventDefault();
+  getColor = formState => {
+    if (formState.isDragAccept) {
+      return "#00e676";
+    }
+    if (formState.isDragReject) {
+      return "#ff1744";
+    }
+    if (formState.isDragActive) {
+      return "#2196f3";
+    }
+    return "#eeeeee";
+  };
 
-      // remove image object from state
-      this.setState(state => ({
-        images: state.images.filter((image, imageIndex) => index !== imageIndex)
-      }));
+  getStyles = formState => {
+    return {
+      flex: 1,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      padding: "20px",
+      borderWidth: "2px",
+      borderRadius: "2px",
+      borderColor: this.getColor(formState),
+      borderStyle: "dashed",
+      backgroundColor: "#fafafa",
+      color: "#bdbdbd",
+      outline: "none",
+      transition: "border 0.24s ease-in-out"
     };
   };
 
   render() {
-    const { images } = this.state;
+    const { files, data } = this.state;
+
     return (
-      <div>
+      <div style={{ overflow: "scroll" }}>
         <form encType="multipart/form-data">
-          {images.map((image, index) => (
-            <div key={index}>
-              <label>Upload image</label>
-              <input type="file" onChange={this.handleFileChange(index)} />
-              <label>Enter caption</label>
-              <input
-                type="text"
-                value={images[index].caption}
-                onChange={this.handleInputChange(index)}
-                name="caption"
-              />
-              <button onClick={this.removeImage(index)}>Remove Image</button>
-            </div>
-          ))}
+          <Dropzone onDrop={this.onDrop} accept="image/*">
+            {({
+              getRootProps,
+              getInputProps,
+              isDragActive,
+              isDragAccept,
+              isDragReject
+            }) => (
+              <section>
+                <div
+                  {...getRootProps({ className: "dropzone" })}
+                  style={this.getStyles({
+                    isDragActive,
+                    isDragAccept,
+                    isDragReject
+                  })}
+                >
+                  <input {...getInputProps()} />
+                  <p>Drag 'n' drop some files here, or click to select files</p>
+                </div>
+                <div>
+                  {files.map((file, index) => (
+                    <div style={{ position: "relative" }}>
+                      <p>{file.name}</p>
+                      <div
+                        style={{
+                          display: "inline-flex",
+                          borderRadius: 2,
+                          border: "1px solid #eaeaea",
+                          marginBottom: 8,
+                          marginRight: 8,
+                          width: 100,
+                          height: 100,
+                          padding: 4,
+                          boxSizing: "border-box"
+                        }}
+                        key={file.name}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            minWidth: 0,
+                            overflow: "hidden"
+                          }}
+                        >
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt={file.name}
+                            style={{
+                              display: "block",
+                              width: "auto",
+                              height: "100%"
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <TextField id="standard-basic" label="Caption" />
+                      </div>
+                      <FormControl
+                        component="fieldset"
+                        className={styles.formControl}
+                      >
+                        <FormGroup row>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={data[index].category.blackandwhite}
+                                onChange={this.handleCheckboxChange(
+                                  index,
+                                  "blackandwhite"
+                                )}
+                                value="blackandwhite"
+                              />
+                            }
+                            label="Black and White"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={data[index].category.portrait}
+                                onChange={this.handleCheckboxChange(
+                                  index,
+                                  "portrait"
+                                )}
+                                value="portrait"
+                              />
+                            }
+                            label="Portrait"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={data[index].category.landscape}
+                                onChange={this.handleCheckboxChange(
+                                  index,
+                                  "landscape"
+                                )}
+                                value="landscape"
+                              />
+                            }
+                            label="Landscape"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={data[index].category.editorial}
+                                onChange={this.handleCheckboxChange(
+                                  index,
+                                  "editorial"
+                                )}
+                                value="editorial"
+                              />
+                            }
+                            label="Editorial"
+                          />
+                        </FormGroup>
+                      </FormControl>
 
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={this.blackandwhite}
-                onChange={this.handleChange}
-                value="blackandwhite"
-              />
-            }
-            label={"B&W"}
-          />
-
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={this.portrait}
-                onChange={this.handleChange}
-                value="portrait"
-              />
-            }
-            label={"Portrait"}
-          />
-
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={this.landscape}
-                onChange={this.handleChange}
-                value="landscape"
-              />
-            }
-            label={"Landscape"}
-          />
-
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={this.editorial}
-                onChange={this.handleChange}
-                value="editorial"
-              />
-            }
-            label={"Editorial"}
-          />
-          <button onClick={this.handleButtonClick}>Add Image</button>
-          <button onClick={this.handleFormSubmit}>Save Image(s)</button>
+                      <CloseIcon
+                        onClick={this.removeImage(index)}
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          right: 0,
+                          cursor: "pointer"
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+          </Dropzone>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ marginTop: "2rem" }}
+            onClick={this.handleFormSubmit}
+          >
+            Save Image(s)
+          </Button>
         </form>
       </div>
     );

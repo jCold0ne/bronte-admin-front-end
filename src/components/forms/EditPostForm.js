@@ -43,9 +43,10 @@ class EditForm extends Component {
   };
 
   onFormSubmit = async event => {
-    event.preventDefault();
     const { title, body, droppedImage, galleryImage } = this.state;
+    const { token } = this.props;
     const { _id, imageId } = this.props.post;
+    event.preventDefault();
 
     try {
       // upload image to express and s3
@@ -54,7 +55,12 @@ class EditForm extends Component {
 
         // delete image from express and s3
         await axios.delete(
-          `${process.env.REACT_APP_SERVER_URL}/images/${imageId}`
+          `${process.env.REACT_APP_SERVER_URL}/images/${imageId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
 
         // build formdata
@@ -69,7 +75,12 @@ class EditForm extends Component {
         // send image to express to save to s3/db
         const postImage = await axios.post(
           `${process.env.REACT_APP_SERVER_URL}/images`,
-          formData
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
 
         // update post in mongodb
@@ -81,6 +92,11 @@ class EditForm extends Component {
             imageId: postImage.data[0]._id,
             imageName: postImage.data[0].name,
             imageUrl: postImage.data[0].url
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
           }
         );
 
@@ -95,6 +111,11 @@ class EditForm extends Component {
             title,
             body,
             ...galleryImage
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
           }
         );
 
@@ -196,4 +217,8 @@ class EditForm extends Component {
   }
 }
 
-export default connect(null, { fetchPosts, fetchImages })(EditForm);
+const mapStateToProps = state => ({
+  token: state.auth.token
+});
+
+export default connect(mapStateToProps, { fetchPosts, fetchImages })(EditForm);

@@ -13,13 +13,18 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import SettingsIcon from "@material-ui/icons/Settings";
+import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 import Link from "@material-ui/core/Link";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "./../ListItems";
 import Posts from "./../Posts.js";
 import Images from "./../Images.js";
-import { fetchPosts, fetchImages } from "./../../actions";
+import { fetchPosts, fetchImages, removeAuthToken } from "./../../actions";
 import { connect } from "react-redux";
 import Dinosaur from "../Dinosaur.js";
 
@@ -122,6 +127,13 @@ class Dashboard extends Component {
     this.setState({ open: false });
   };
 
+  handleLogout = () => {
+    const { removeAuthToken } = this.props;
+
+    removeAuthToken();
+    this.props.history.push("/");
+  };
+
   render() {
     const { open } = this.state;
     const { classes } = this.props;
@@ -172,7 +184,22 @@ class Dashboard extends Component {
           <Divider />
           <List>{mainListItems}</List>
           <Divider />
-          <List>{secondaryListItems}</List>
+          <List>
+            <div>
+              <ListItem button>
+                <ListItemIcon>
+                  <SettingsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Settings" />
+              </ListItem>
+              <ListItem button onClick={this.handleLogout}>
+                <ListItemIcon>
+                  <PowerSettingsNewIcon />
+                </ListItemIcon>
+                <ListItemText primary="Logout" />
+              </ListItem>
+            </div>
+          </List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
@@ -191,6 +218,6 @@ class Dashboard extends Component {
   }
 }
 
-export default connect(null, { fetchPosts, fetchImages })(
+export default connect(null, { fetchPosts, fetchImages, removeAuthToken })(
   withStyles(classes)(Dashboard)
 );

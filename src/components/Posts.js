@@ -37,7 +37,9 @@ const classes = theme => ({
     flexDirection: "column"
   },
   cardMedia: {
-    paddingTop: "56.25%" // 16:9
+    paddingTop: "56.25%",
+    height: "100%",
+    width: "100%"
   },
   cardContent: {
     flexGrow: 1

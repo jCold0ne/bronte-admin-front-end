@@ -45,6 +45,10 @@ class ImageForm extends Component {
             portrait: false,
             landscape: false,
             editorial: false
+          },
+          error: {
+            caption: false,
+            category: false
           }
         }))
       ]
@@ -250,6 +254,7 @@ class ImageForm extends Component {
                           id="standard-basic"
                           label="Caption"
                           onChange={this.handleInputChange(index)}
+                          error
                         />
                       </div>
                       <FormControl

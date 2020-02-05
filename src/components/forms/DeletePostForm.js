@@ -7,20 +7,10 @@ import axios from "axios";
 class DeleteForm extends Component {
   onFormSubmit = async event => {
     const { token } = this.props;
-    const { _id, imageId } = this.props.post;
+    const { _id } = this.props.post;
     event.preventDefault();
 
     try {
-      // delete image from mongodb/s3
-      await axios.delete(
-        `${process.env.REACT_APP_SERVER_URL}/images/${imageId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-
       // delete post from mongodb
       await axios.delete(`${process.env.REACT_APP_SERVER_URL}/posts/${_id}`, {
         headers: {

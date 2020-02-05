@@ -70,6 +70,7 @@ class PostForm extends Component {
           }
         );
 
+        console.log(postImage);
         // receive url and save post/image url to mongodb
         await axios.post(
           `${process.env.REACT_APP_SERVER_URL}/posts`,

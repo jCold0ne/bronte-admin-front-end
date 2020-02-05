@@ -114,6 +114,13 @@ class ImageForm extends Component {
     const { token } = this.props;
     event.preventDefault();
 
+    // check for errors
+    // data.forEach(({error}) => {
+    //   if (error.caption || error.category) {
+
+    //   }
+    // })
+
     const formData = new FormData();
 
     files.forEach((file, index) => {

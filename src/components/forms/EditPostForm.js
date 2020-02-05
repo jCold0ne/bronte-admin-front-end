@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { connect } from "react-redux";
 import { fetchPosts, fetchImages } from "../../actions";
 import axios from "axios";
@@ -18,7 +19,8 @@ class EditForm extends Component {
       imageId: this.props.post.imageId
     },
     updated: false,
-    error: null
+    error: null,
+    loading: false
   };
 
   onDrop = file => {
@@ -42,11 +44,14 @@ class EditForm extends Component {
     });
   };
 
-  onFormSubmit = async event => {
+  handleFormSubmit = async event => {
     const { title, body, droppedImage, galleryImage } = this.state;
     const { token } = this.props;
     const { _id, imageId } = this.props.post;
     event.preventDefault();
+
+    // set loading to true
+    this.setState({ loading: true });
 
     try {
       // upload image to express and s3
@@ -122,6 +127,9 @@ class EditForm extends Component {
         console.log(updatedPost);
       }
 
+      // set loading to false
+      this.setState({ loading: false });
+
       // fetch posts/images
       await this.props.fetchPosts();
       await this.props.fetchImages();
@@ -139,7 +147,7 @@ class EditForm extends Component {
   };
 
   render() {
-    const { title, body, galleryImage, droppedImage } = this.state;
+    const { title, body, galleryImage, droppedImage, loading } = this.state;
 
     return (
       <form>
@@ -204,14 +212,28 @@ class EditForm extends Component {
           setImage={this.setImage}
           onDrop={this.onDrop}
         />
-        <Button
-          variant="contained"
-          color="primary"
-          type="button"
-          onClick={this.onFormSubmit}
-        >
-          Edit Post
-        </Button>
+        <div style={{ position: "relative", display: "inline-block" }}>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={loading}
+            onClick={this.handleFormSubmit}
+          >
+            Edit Post
+          </Button>
+          {loading && (
+            <CircularProgress
+              size={24}
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                marginTop: -12,
+                marginLeft: -12
+              }}
+            />
+          )}
+        </div>
       </form>
     );
   }

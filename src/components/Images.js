@@ -15,6 +15,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Link from "@material-ui/core/Link";
 import ModalWrapper from "./ModalWrapper";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import CreateImageForm from "./forms/CreateImageForm";
 import EditImageForm from "./forms/EditImageForm";
 import DeleteImageForm from "./forms/DeleteImageForm";
@@ -55,15 +56,21 @@ const classes = theme => ({
 });
 
 class Images extends Component {
+  state = {
+    loading: true
+  };
+
   async componentDidMount() {
     try {
-      this.props.fetchImages();
+      await this.props.fetchImages();
+      this.setState({ loading: false });
     } catch (error) {
       console.log(error);
     }
   }
 
   render() {
+    const { loading } = this.state;
     const { images } = this.props;
 
     return (
@@ -72,61 +79,73 @@ class Images extends Component {
 
         <main>
           {/* Hero unit */}
-          <div className={classes.heroContent}>
-            <Container maxWidth="sm">
-              <Typography
-                component="h1"
-                variant="h2"
-                align="center"
-                color="textPrimary"
-                gutterBottom
-              >
-                Images
-              </Typography>
-              <div className={classes.heroButtons}>
-                <Grid container spacing={2} justify="center">
-                  <Grid item>
-                    <ModalWrapper
-                      text="Create Image"
-                      component={CreateImageForm}
-                    />
-                  </Grid>
-                </Grid>
+          {loading ? (
+            <CircularProgress
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%"
+              }}
+            />
+          ) : (
+            <>
+              <div className={classes.heroContent}>
+                <Container maxWidth="sm">
+                  <Typography
+                    component="h1"
+                    variant="h2"
+                    align="center"
+                    color="textPrimary"
+                    gutterBottom
+                  >
+                    Images
+                  </Typography>
+                  <div className={classes.heroButtons}>
+                    <Grid container spacing={2} justify="center">
+                      <Grid item>
+                        <ModalWrapper
+                          text="Create Image"
+                          component={CreateImageForm}
+                        />
+                      </Grid>
+                    </Grid>
+                  </div>
+                </Container>
               </div>
-            </Container>
-          </div>
-          <Container className={classes.cardGrid} maxWidth="md">
-            {/* End hero unit */}
-            <Grid container spacing={4}>
-              {images.reverse().map(image => (
-                <Grid item key={image._id} xs={12} sm={6} md={4}>
-                  <Card className={classes.card}>
-                    <CardMedia
-                      className={classes.cardMedia}
-                      src={image.url}
-                      component="img"
-                      title="Image title"
-                    />
-                    <CardContent className={classes.cardContent}>
-                      <Typography>{image.caption}</Typography>
-                    </CardContent>
-                    <CardActions>
-                      <ModalWrapper
-                        text="Edit"
-                        component={EditImageForm}
-                        image={image}
-                      />
-                      <ModalWrapper
-                        text="Delete"
-                        component={DeleteImageForm}
-                        image={image}
-                      />
-                    </CardActions>
-                  </Card>
+              <Container className={classes.cardGrid} maxWidth="md">
+                {/* End hero unit */}
+                <Grid container spacing={4}>
+                  {images.reverse().map(image => (
+                    <Grid item key={image._id} xs={12} sm={6} md={4}>
+                      <Card className={classes.card}>
+                        <CardMedia
+                          className={classes.cardMedia}
+                          src={image.url}
+                          component="img"
+                          title="Image title"
+                        />
+                        <CardContent className={classes.cardContent}>
+                          <Typography>{image.caption}</Typography>
+                        </CardContent>
+                        <CardActions>
+                          <ModalWrapper
+                            text="Edit"
+                            component={EditImageForm}
+                            image={image}
+                          />
+                          <ModalWrapper
+                            text="Delete"
+                            component={DeleteImageForm}
+                            image={image}
+                          />
+                        </CardActions>
+                      </Card>
+                    </Grid>
+                  ))}
                 </Grid>
-              ))}
-            </Grid>
-          </Container>
+              </Container>
+            </>
+          )}
         </main>
       </React.Fragment>
     );

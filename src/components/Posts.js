@@ -5,6 +5,7 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -47,22 +48,26 @@ const classes = theme => ({
   }
 });
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
 function addEllipses(post) {
   if (post.body.length > 30) return post.body.substring(0, 30) + "...";
 }
 
 class Posts extends Component {
+  state = {
+    loading: true
+  };
+
   async componentDidMount() {
     try {
-      this.props.fetchPosts();
+      await this.props.fetchPosts();
+      this.setState({ loading: false });
     } catch (error) {
       console.log(error);
     }
   }
 
   render() {
+    const { loading } = this.state;
     const { classes, posts } = this.props;
 
     return (
@@ -70,66 +75,78 @@ class Posts extends Component {
         <CssBaseline />
 
         <main>
-          <div className={classes.heroContent}>
-            <Container maxWidth="sm">
-              <Typography
-                component="h1"
-                variant="h2"
-                align="center"
-                color="textPrimary"
-                gutterBottom
-              >
-                Posts
-              </Typography>
+          {loading ? (
+            <CircularProgress
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%"
+              }}
+            />
+          ) : (
+            <>
+              <div className={classes.heroContent}>
+                <Container maxWidth="sm">
+                  <Typography
+                    component="h1"
+                    variant="h2"
+                    align="center"
+                    color="textPrimary"
+                    gutterBottom
+                  >
+                    Posts
+                  </Typography>
 
-              <div className={classes.heroButtons}>
-                <Grid container spacing={2} justify="center">
-                  <Grid item>
-                    <ModalWrapper
-                      text="Create Post"
-                      component={CreatePostForm}
-                    />
-                  </Grid>
-                </Grid>
+                  <div className={classes.heroButtons}>
+                    <Grid container spacing={2} justify="center">
+                      <Grid item>
+                        <ModalWrapper
+                          text="Create Post"
+                          component={CreatePostForm}
+                        />
+                      </Grid>
+                    </Grid>
+                  </div>
+                </Container>
               </div>
-            </Container>
-          </div>
-          <Container className={classes.cardGrid} maxWidth="md">
-            <Grid container spacing={4}>
-              {posts.reverse().map(post => (
-                <Grid item key={post._id} xs={12} sm={6} md={4}>
-                  <Card className={classes.card}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      {post.title}
-                    </Typography>
+              <Container className={classes.cardGrid} maxWidth="md">
+                <Grid container spacing={4}>
+                  {posts.reverse().map(post => (
+                    <Grid item key={post._id} xs={12} sm={6} md={4}>
+                      <Card className={classes.card}>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          {post.title}
+                        </Typography>
 
-                    <CardMedia
-                      className={classes.cardMedia}
-                      image={post.imageUrl}
-                      title="Image title"
-                    />
+                        <CardMedia
+                          className={classes.cardMedia}
+                          image={post.imageUrl}
+                          title="Image title"
+                        />
 
-                    <CardContent className={classes.cardContent}>
-                      <Typography>{addEllipses(post)}</Typography>
-                    </CardContent>
+                        <CardContent className={classes.cardContent}>
+                          <Typography>{addEllipses(post)}</Typography>
+                        </CardContent>
 
-                    <CardActions>
-                      <ModalWrapper
-                        text="Edit"
-                        component={EditPostForm}
-                        post={post}
-                      />
-                      <ModalWrapper
-                        text="Delete"
-                        component={DeletePostForm}
-                        post={post}
-                      />
-                    </CardActions>
-                  </Card>
+                        <CardActions>
+                          <ModalWrapper
+                            text="Edit"
+                            component={EditPostForm}
+                            post={post}
+                          />
+                          <ModalWrapper
+                            text="Delete"
+                            component={DeletePostForm}
+                            post={post}
+                          />
+                        </CardActions>
+                      </Card>
+                    </Grid>
+                  ))}
                 </Grid>
-              ))}
-            </Grid>
-          </Container>
+              </Container>
+            </>
+          )}
         </main>
       </React.Fragment>
     );

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Alert from "@material-ui/lab/Alert";
 import { connect } from "react-redux";
 import { fetchPosts, fetchImages } from "../../actions";
 import axios from "axios";
@@ -49,6 +50,19 @@ class EditForm extends Component {
     const { token } = this.props;
     const { _id, imageId } = this.props.post;
     event.preventDefault();
+
+    // form validation
+    if (!title || !body) {
+      return this.setState(state => ({
+        error: "Please enter all fields"
+      }));
+    }
+
+    if (!droppedImage && !galleryImage) {
+      return this.setState(state => ({
+        error: "Please enter all fields"
+      }));
+    }
 
     // set loading to true
     this.setState({ loading: true });
@@ -147,10 +161,18 @@ class EditForm extends Component {
   };
 
   render() {
-    const { title, body, galleryImage, droppedImage, loading } = this.state;
+    const {
+      title,
+      body,
+      galleryImage,
+      droppedImage,
+      loading,
+      error
+    } = this.state;
 
     return (
       <form>
+        {error && <Alert severity="error">{error}</Alert>}
         <div
           style={{
             display: "inline-flex",

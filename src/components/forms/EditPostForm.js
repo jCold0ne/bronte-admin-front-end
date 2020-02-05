@@ -228,20 +228,27 @@ class EditForm extends Component {
             shrink: true
           }}
         />
-        <ModalWrapper
-          text="Select Post Image"
-          component={PostImageForm}
-          setImage={this.setImage}
-          onDrop={this.onDrop}
-        />
-        <div style={{ position: "relative", display: "inline-block" }}>
+        <div style={{ marginBottom: "1rem" }}>
+          <ModalWrapper
+            text="Select Post Image"
+            component={PostImageForm}
+            setImage={this.setImage}
+            onDrop={this.onDrop}
+          />
+        </div>
+        <div
+          style={{
+            position: "relative",
+            display: "inline-block"
+          }}
+        >
           <Button
             variant="contained"
             color="primary"
             disabled={loading}
             onClick={this.handleFormSubmit}
           >
-            Edit Post
+            Save Post
           </Button>
           {loading && (
             <CircularProgress
@@ -251,7 +258,8 @@ class EditForm extends Component {
                 top: "50%",
                 left: "50%",
                 marginTop: -12,
-                marginLeft: -12
+                marginLeft: -12,
+                color: "#8b0000"
               }}
             />
           )}

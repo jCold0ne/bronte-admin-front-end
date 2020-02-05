@@ -356,7 +356,8 @@ class ImageForm extends Component {
                   top: "50%",
                   left: "50%",
                   marginTop: -12,
-                  marginLeft: -12
+                  marginLeft: -12,
+                  color: "#8b0000"
                 }}
               />
             )}

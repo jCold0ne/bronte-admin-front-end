@@ -4,7 +4,6 @@ import clsx from "clsx";
 import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
-import Box from "@material-ui/core/Box";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
@@ -18,14 +17,14 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import SettingsIcon from "@material-ui/icons/Settings";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
-import Link from "@material-ui/core/Link";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { mainListItems, secondaryListItems } from "./../ListItems";
+import { mainListItems } from "./../ListItems";
 import Posts from "./../Posts.js";
 import Images from "./../Images.js";
 import { fetchPosts, fetchImages, removeAuthToken } from "./../../actions";
 import { connect } from "react-redux";
+import Dinosaur from "../Dinosaur.js";
 
 const drawerWidth = 240;
 
@@ -207,6 +206,7 @@ class Dashboard extends Component {
               <Switch>
                 <Route path="/dashboard/posts" component={Posts} />
                 <Route path="/dashboard/images" component={Images} />
+                <Route path="/dashboard" component={Dinosaur} />
               </Switch>
             </Grid>
           </Container>

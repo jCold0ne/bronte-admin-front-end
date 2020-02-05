@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import TextField from "@material-ui/core/TextField";
 import { fetchImages } from "../../actions";
 
 const styles = theme => ({
@@ -111,7 +113,7 @@ class EditImageForm extends Component {
     const { url } = this.props.image;
     return (
       <div>
-        <form onSubmit={this.handleFormSubmit}>
+        <form>
           <div key={url}>
             <div
               style={{
@@ -146,13 +148,15 @@ class EditImageForm extends Component {
               </div>
             </div>
           </div>
-          <label>Edit caption</label>
-          <input
-            type="text"
-            value={caption}
-            name="caption"
-            onChange={this.handleInputChange}
-          />
+          <div>
+            <TextField
+              id="standard-basic"
+              label="Caption"
+              value={caption}
+              name="caption"
+              onChange={this.handleInputChange}
+            />
+          </div>
           <FormControl component="fieldset" className={styles.formControl}>
             <FormGroup row>
               <FormControlLabel
@@ -197,7 +201,15 @@ class EditImageForm extends Component {
               />
             </FormGroup>
           </FormControl>
-          <button>Edit Image</button>
+          <div>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={this.handleFormSubmit}
+            >
+              Edit Image
+            </Button>
+          </div>
         </form>
       </div>
     );

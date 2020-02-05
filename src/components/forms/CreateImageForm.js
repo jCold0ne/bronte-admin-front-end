@@ -45,6 +45,10 @@ class ImageForm extends Component {
             portrait: false,
             landscape: false,
             editorial: false
+          },
+          error: {
+            caption: false,
+            category: false
           }
         }))
       ]
@@ -109,6 +113,13 @@ class ImageForm extends Component {
     const { files, data } = this.state;
     const { token } = this.props;
     event.preventDefault();
+
+    // check for errors
+    // data.forEach(({error}) => {
+    //   if (error.caption || error.category) {
+
+    //   }
+    // })
 
     const formData = new FormData();
 
@@ -250,6 +261,7 @@ class ImageForm extends Component {
                           id="standard-basic"
                           label="Caption"
                           onChange={this.handleInputChange(index)}
+                          error
                         />
                       </div>
                       <FormControl

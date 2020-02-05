@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Alert from "@material-ui/lab/Alert";
 import { connect } from "react-redux";
 import { fetchPosts, fetchImages } from "../../actions";
 import axios from "axios";
@@ -43,6 +44,19 @@ class PostForm extends Component {
     const { token } = this.props;
     event.preventDefault();
 
+    // form validation
+    if (!title || !body) {
+      return this.setState(state => ({
+        error: "Please enter all fields"
+      }));
+    }
+
+    if (!image && !galleryImage) {
+      return this.setState(state => ({
+        error: "Please enter all fields"
+      }));
+    }
+
     // set loading to true
     this.setState({ loading: true });
 
@@ -70,6 +84,7 @@ class PostForm extends Component {
           }
         );
 
+        console.log(postImage);
         // receive url and save post/image url to mongodb
         await axios.post(
           `${process.env.REACT_APP_SERVER_URL}/posts`,
@@ -140,10 +155,11 @@ class PostForm extends Component {
   };
 
   render() {
-    const { title, body, galleryImage, image, loading } = this.state;
+    const { title, body, galleryImage, image, loading, error } = this.state;
 
     return (
       <form>
+        {error && <Alert severity="error">{error}</Alert>}
         {(galleryImage || image) && (
           <div
             style={{
@@ -176,35 +192,39 @@ class PostForm extends Component {
             </div>
           </div>
         )}
+        <div style={{ marginTop: "2rem" }}>
+          <TextField
+            name="title"
+            value={title}
+            onChange={this.onInputChange}
+            id="standard-basic"
+            label="Title"
+          />
+          <TextField
+            name="body"
+            id="standard-multiline-full-width"
+            label="Body"
+            multiline
+            rowsMax="10"
+            value={body}
+            onChange={this.onInputChange}
+            margin="normal"
+            fullWidth
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
 
-        <TextField
-          name="title"
-          value={title}
-          onChange={this.onInputChange}
-          id="standard-basic"
-          label="Title"
-        />
-        <TextField
-          name="body"
-          id="standard-multiline-full-width"
-          label="Body"
-          multiline
-          rowsMax="10"
-          value={body}
-          onChange={this.onInputChange}
-          margin="normal"
-          fullWidth
-          InputLabelProps={{
-            shrink: true
-          }}
-        />
+
         <div style={{ marginBottom: "1rem" }}>
+
           <ModalWrapper
             text="Select Post Image"
             component={PostImageForm}
             setImage={this.setImage}
             onDrop={this.onDrop}
           />
+
         </div>
 
         <div style={{ position: "relative", display: "inline-block" }}>

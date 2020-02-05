@@ -207,7 +207,7 @@ class EditImageForm extends Component {
               color="primary"
               onClick={this.handleFormSubmit}
             >
-              Edit Image
+              Save Image
             </Button>
           </div>
         </form>

@@ -3,12 +3,9 @@ import { Link } from "react-router-dom";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import ListSubheader from "@material-ui/core/ListSubheader";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import ImageIcon from "@material-ui/icons/Image";
-import SettingsIcon from "@material-ui/icons/Settings";
-import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 
 export const mainListItems = (
   <div>

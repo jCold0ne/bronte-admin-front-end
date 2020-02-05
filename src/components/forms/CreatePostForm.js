@@ -200,31 +200,29 @@ class PostForm extends Component {
             id="standard-basic"
             label="Title"
           />
-          <TextField
-            name="body"
-            id="standard-multiline-full-width"
-            label="Body"
-            multiline
-            rowsMax="10"
-            value={body}
-            onChange={this.onInputChange}
-            margin="normal"
-            fullWidth
-            InputLabelProps={{
-              shrink: true
-            }}
-          />
-
+        </div>
+        <TextField
+          name="body"
+          id="standard-multiline-full-width"
+          label="Body"
+          multiline
+          rowsMax="10"
+          value={body}
+          onChange={this.onInputChange}
+          margin="normal"
+          fullWidth
+          InputLabelProps={{
+            shrink: true
+          }}
+        />
 
         <div style={{ marginBottom: "1rem" }}>
-
           <ModalWrapper
             text="Select Post Image"
             component={PostImageForm}
             setImage={this.setImage}
             onDrop={this.onDrop}
           />
-
         </div>
 
         <div style={{ position: "relative", display: "inline-block" }}>

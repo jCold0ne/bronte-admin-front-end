@@ -9,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import CloseIcon from "@material-ui/icons/Close";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { fetchImages } from "../../actions";
 import Dropzone from "react-dropzone";
 
@@ -27,11 +28,13 @@ const styles = theme => ({
 class ImageForm extends Component {
   state = {
     files: [],
-    data: []
+    data: [],
+    loading: false
   };
 
   onDrop = files => {
     this.setState(state => ({
+      ...state,
       files: [...state.files, ...files],
       data: [
         ...state.data,
@@ -128,6 +131,9 @@ class ImageForm extends Component {
       formData.append(file.name, JSON.stringify(newData));
     });
 
+    // set loading to true
+    this.setState({ loading: true });
+
     // make axios request
 
     await axios.post(`${process.env.REACT_APP_SERVER_URL}/images`, formData, {
@@ -135,6 +141,9 @@ class ImageForm extends Component {
         Authorization: `Bearer ${token}`
       }
     });
+
+    // set loading to false
+    this.setState({ loading: false });
 
     // update redux state to show new uploads
     this.props.fetchImages();
@@ -175,7 +184,7 @@ class ImageForm extends Component {
   };
 
   render() {
-    const { files, data } = this.state;
+    const { files, data, loading } = this.state;
 
     return (
       <div style={{ overflow: "scroll" }}>
@@ -318,14 +327,28 @@ class ImageForm extends Component {
               </section>
             )}
           </Dropzone>
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ marginTop: "2rem" }}
-            onClick={this.handleFormSubmit}
-          >
-            Save Image(s)
-          </Button>
+          <div style={{ position: "relative", display: "inline-block" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={loading}
+              onClick={this.handleFormSubmit}
+            >
+              Save Image(s)
+            </Button>
+            {loading && (
+              <CircularProgress
+                size={24}
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  marginTop: -12,
+                  marginLeft: -12
+                }}
+              />
+            )}
+          </div>
         </form>
       </div>
     );

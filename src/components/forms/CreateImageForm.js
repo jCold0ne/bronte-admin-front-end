@@ -261,7 +261,6 @@ class ImageForm extends Component {
                           id="standard-basic"
                           label="Caption"
                           onChange={this.handleInputChange(index)}
-                          error
                         />
                       </div>
                       <FormControl

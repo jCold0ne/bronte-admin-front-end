@@ -24,43 +24,14 @@ class DeleteImageForm extends Component {
   };
 
   render() {
-    const { url, caption } = this.props.image;
+    const { url, caption } = this.props;
 
     return (
       <form>
         <h1 style={{ color: "#F50057" }}>
           Are you sure you want to delete this image?
         </h1>
-        <div
-          style={{
-            display: "inline-flex",
-            borderRadius: 2,
-            marginBottom: 8,
-            marginRight: 8,
-            width: 100,
-            height: 100,
-            padding: 4,
-            boxSizing: "border-box"
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              minWidth: 0,
-              overflow: "hidden"
-            }}
-          >
-            <img
-              src={url}
-              alt={caption}
-              style={{
-                display: "block",
-                width: "auto",
-                height: "100%"
-              }}
-            />
-          </div>
-        </div>
+        <img src={url} alt={caption} />
         <p>{caption}</p>
         <Button
           variant="contained"

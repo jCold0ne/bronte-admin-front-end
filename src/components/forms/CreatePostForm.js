@@ -211,7 +211,7 @@ class PostForm extends Component {
             disabled={loading}
             onClick={this.handleFormSubmit}
           >
-            Save Image(s)
+            Save Post
           </Button>
           {loading && (
             <CircularProgress

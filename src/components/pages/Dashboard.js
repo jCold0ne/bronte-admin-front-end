@@ -184,12 +184,6 @@ class Dashboard extends Component {
           <Divider />
           <List>
             <div>
-              <ListItem button>
-                <ListItemIcon>
-                  <SettingsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Settings" />
-              </ListItem>
               <ListItem button onClick={this.handleLogout}>
                 <ListItemIcon>
                   <PowerSettingsNewIcon />

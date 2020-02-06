@@ -8,6 +8,7 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import TextField from "@material-ui/core/TextField";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { fetchImages } from "../../actions";
 
 const styles = theme => ({
@@ -36,7 +37,8 @@ class EditImageForm extends Component {
       landscape: false,
       editorial: false,
       post: false
-    }
+    },
+    loading: false
   };
 
   componentDidMount() {
@@ -82,6 +84,9 @@ class EditImageForm extends Component {
 
     event.preventDefault();
 
+    // set loading to true
+    this.setState({ loading: true })
+
     // build categories array
     const categoryArray = [];
     for (let category in categoryObject) {
@@ -105,11 +110,14 @@ class EditImageForm extends Component {
 
     this.props.fetchImages();
 
+    // set loading to false
+    this.setState({ loading: false })
+
     this.props.handleClose();
   };
 
   render() {
-    const { caption, category } = this.state;
+    const { caption, category, loading } = this.state;
     const { url } = this.props.image;
     return (
       <div>
@@ -201,14 +209,28 @@ class EditImageForm extends Component {
               />
             </FormGroup>
           </FormControl>
-          <div>
+          <div style={{ position: "relative", display: "inline-block" }}>
             <Button
               variant="contained"
               color="primary"
+              disabled={loading}
               onClick={this.handleFormSubmit}
             >
               Save Image
             </Button>
+            {loading && (
+              <CircularProgress
+                size={24}
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  marginTop: -12,
+                  marginLeft: -12,
+                  color: "#8b0000"
+                }}
+              />
+            )}
           </div>
         </form>
       </div>

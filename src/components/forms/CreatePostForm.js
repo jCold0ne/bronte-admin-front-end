@@ -122,14 +122,14 @@ class PostForm extends Component {
         );
       }
 
-      // set loading to false
-      this.setState({ loading: false });
-
       // fetch posts
       await this.props.fetchPosts();
 
       // fetch images
       await this.props.fetchImages();
+
+      // set loading to false
+      this.setState({ loading: false });
 
       // close modal
       this.props.handleClose();

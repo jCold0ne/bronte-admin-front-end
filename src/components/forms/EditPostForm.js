@@ -141,12 +141,12 @@ class EditForm extends Component {
         console.log(updatedPost);
       }
 
-      // set loading to false
-      this.setState({ loading: false });
-
       // fetch posts/images
       await this.props.fetchPosts();
       await this.props.fetchImages();
+
+      // set loading to false
+      this.setState({ loading: false });
 
       // close modal
       this.props.handleClose();

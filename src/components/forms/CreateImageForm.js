@@ -114,12 +114,8 @@ class ImageForm extends Component {
     const { token } = this.props;
     event.preventDefault();
 
-    // check for errors
-    // data.forEach(({error}) => {
-    //   if (error.caption || error.category) {
-
-    //   }
-    // })
+    // set loading to true
+    this.setState({ loading: true });
 
     const formData = new FormData();
 
@@ -142,9 +138,6 @@ class ImageForm extends Component {
       formData.append(file.name, JSON.stringify(newData));
     });
 
-    // set loading to true
-    this.setState({ loading: true });
-
     // make axios request
 
     await axios.post(`${process.env.REACT_APP_SERVER_URL}/images`, formData, {
@@ -153,11 +146,11 @@ class ImageForm extends Component {
       }
     });
 
-    // set loading to false
-    this.setState({ loading: false });
-
     // update redux state to show new uploads
     this.props.fetchImages();
+
+    // set loading to false
+    this.setState({ loading: false });
 
     // close modal
     this.props.handleClose();

@@ -64,6 +64,9 @@ class SignIn extends Component {
     const { history, setAuthToken } = this.props;
     event.preventDefault();
 
+    // set error to null to remove previous error message
+    this.setState({ error: null });
+
     try {
       // handle password verification here
       const response = await axios.post(
@@ -71,7 +74,6 @@ class SignIn extends Component {
         { email, password }
       );
       // set token in redux store here
-      console.log(response);
       setAuthToken(response.data);
       history.push("/dashboard");
     } catch (error) {

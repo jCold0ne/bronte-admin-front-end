@@ -76,7 +76,7 @@ class Posts extends Component {
       <React.Fragment>
         <CssBaseline />
 
-        <main>
+        <main style={{ width: "100%" }}>
           {loading ? (
             <CircularProgress
               style={{

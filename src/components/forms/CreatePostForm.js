@@ -91,7 +91,6 @@ class PostForm extends Component {
           {
             title,
             body,
-            draft: false,
             imageUrl: postImage.data[0].url,
             imageName: postImage.data[0].name,
             imageId: postImage.data[0]._id
@@ -109,7 +108,6 @@ class PostForm extends Component {
           {
             title,
             body,
-            draft: false,
             imageUrl: galleryImage.url,
             imageName: galleryImage.name,
             imageId: galleryImage._id
